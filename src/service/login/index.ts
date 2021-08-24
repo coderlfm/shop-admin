@@ -4,8 +4,11 @@ import { ILoginData } from './type';
 
 enum Login {
   login = 'login',
+  permission = 'login/permission',
 }
 
-// export const loginApi: () => Promise<IDataType> = (data) => Request.post({ url: Login.login, data });
-
+// 登录
 export const loginApi: (data: ILoginData) => Promise<IDataType> = (data) => Request.post({ url: Login.login, data });
+
+// 获取权限列表
+export const getPermissionApi: () => Promise<IDataType> = () => Request.get({ url: Login.permission });

@@ -20,8 +20,10 @@
 import { ref } from 'vue';
 import { ElForm, ElMessage } from 'element-plus';
 import router from '@/router';
+import { setupStore } from '@/store';
 import { loginApi } from '@/service';
 import { ILoginData } from '@/service/type';
+
 const formRef = ref<InstanceType<typeof ElForm>>();
 const formValues = ref<ILoginData>({
   account: '',
@@ -40,7 +42,8 @@ const handleLoign = () => {
       const { code, data, msg } = await loginApi(formValues.value);
       if (code) return ElMessage.warning(msg ?? '请求超时');
       ElMessage.success('登录成功');
-      localStorage.setItem('token', data.toekn);
+      localStorage.setItem('token', data.token);
+      await setupStore();
       router.push('/');
     } else {
       return false;
