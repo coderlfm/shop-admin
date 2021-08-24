@@ -3,14 +3,9 @@
     <el-container class="main-content">
       <el-aside :width="isCollapse ? '60px' : '210px'">
         <Menus />
-        <!-- <nav-menu :collapse="isCollapse" /> -->
-        菜单
       </el-aside>
       <el-container class="page">
-        <el-header class="page-header">
-          头部
-          <!-- <nav-header @foldChange="handleFoldChange" /> -->
-        </el-header>
+        <el-header class="page-header"><NavBar /></el-header>
         <el-main class="page-content">
           <div class="page-info">
             <router-view></router-view>
@@ -24,6 +19,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import Menus from './menus/index.vue';
+import NavBar from './nav-bar/index.vue';
 
 const isCollapse = ref(false);
 const handleFoldChange = (isFold: boolean) => {
@@ -72,7 +68,7 @@ const handleFoldChange = (isFold: boolean) => {
   line-height: 200px;
   text-align: left;
   cursor: pointer;
-  background-color: #001529;
+  background-color: #213262;
   transition: width 0.3s linear;
   scrollbar-width: none; /* firefox */
   -ms-overflow-style: none; /* IE 10+ */

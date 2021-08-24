@@ -6,23 +6,17 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'main',
     component: () => import(/* webpackChunkName: "main" */ '../views/main/index.vue'),
-    children: [
-      // {
-      //   path: '/order',
-      //   name: 'order',
-      //   component: () => import(/* webpackChunkName: "order" */ '../views/orders/index.vue'),
-      // },
-      // {
-      //   path: '/product',
-      //   name: 'product',
-      //   component: () => import(/* webpackChunkName: "product" */ '../views/products/index.vue'),
-      // },
-    ],
+    children: [],
   },
   {
     path: '/login',
     name: 'login',
     component: () => import(/* webpackChunkName: "login" */ '../views/login/index.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('@/views/not-found/index.vue'),
   },
 ];
 
@@ -39,4 +33,9 @@ router.beforeEach((to, from) => {
 // 注册所有路由
 regitstrRouter().forEach((item) => router.addRoute('main', item));
 
+router.addRoute('main', {
+  path: '/:pathMatch(.*)*',
+  name: 'notFound',
+  component: () => import('@/views/not-found/index.vue'),
+});
 export default router;
