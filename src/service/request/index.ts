@@ -53,6 +53,7 @@ class Request {
         const data = res.data;
         if (data.code) {
           console.log('请求失败~, 错误信息', data);
+          return data;
         } else {
           return data;
         }
