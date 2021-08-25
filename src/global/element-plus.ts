@@ -11,6 +11,10 @@ import {
   ElMenu,
   ElMenuItem,
   ElSubmenu,
+  ElTable,
+  ElTableColumn,
+  ElCard,
+  ElImage,
 } from 'element-plus';
 import 'element-plus/lib/theme-chalk/base.css';
 
@@ -26,6 +30,10 @@ const components = [
   ElMenu,
   ElSubmenu,
   ElMenuItem,
+  ElTable,
+  ElTableColumn,
+  ElCard,
+  ElImage,
 ];
 
 export default function (app: App) {

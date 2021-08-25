@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "core-js": "^3.8.3",
+    "dayjs": "^1.10.6",
     "element-plus": "^1.0.2-beta.71",
     "eslint-config-prettier": "^8.3.0",
     "prettier-eslint": "^13.0.0",
