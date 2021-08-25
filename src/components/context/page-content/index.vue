@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
-          <span>{{ title }}</span>
+          <Form :formList="form.search" />
         </div>
       </template>
       <Table :tableData="tableData.list" :columns="columns">
@@ -23,6 +23,11 @@
             {{ $filters.formatDate(scope.row.updatedAt) }}
           </template>
 
+          <template v-else-if="item.slotName === 'handle'">
+            <el-button icon="el-icon-edit" type="text">编辑</el-button>
+            <el-button icon="el-icon-delete" type="text">删除</el-button>
+          </template>
+
           <slot v-else :name="item.slotName" :row="scope.row"></slot>
         </template>
       </Table>
@@ -32,12 +37,15 @@
 <script lang="ts" setup>
 import { defineProps, onMounted, ref, reactive } from 'vue';
 import { getListApi } from '@/service';
-import { Table } from '@/components/context';
+import { Table, Form } from '@/components/context';
 
 const props = defineProps<{
   title: string;
   url: string;
   columns: any[];
+  form: {
+    search: any[];
+  };
 }>();
 
 const pageInfo = ref({ page: 1, pageSize: 10 });
@@ -47,16 +55,8 @@ onMounted(() => getList());
 
 const getList = async () => {
   const { data } = await getListApi(props.url, pageInfo.value);
-  console.log('data', data);
-
   tableData.list = data.list;
-  // Request.get({ url: props.url });
 };
 
-const otherSlot = props.columns.filter((item) => {
-  if (item.slotName) {
-    return true;
-  }
-  return false;
-});
+const otherSlot = props.columns.filter((item) => item.slotName);
 </script>

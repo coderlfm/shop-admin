@@ -15,6 +15,8 @@ import {
   ElTableColumn,
   ElCard,
   ElImage,
+  ElRow,
+  ElCol,
 } from 'element-plus';
 import 'element-plus/lib/theme-chalk/base.css';
 
@@ -34,6 +36,8 @@ const components = [
   ElTableColumn,
   ElCard,
   ElImage,
+  ElRow,
+  ElCol
 ];
 
 export default function (app: App) {
