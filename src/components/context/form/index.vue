@@ -68,7 +68,6 @@ const formRef = ref<InstanceType<typeof ElForm>>();
 const handleSearch = async () => {
   const valid = await formRef.value?.validate();
   if (valid) {
-    console.log('验证成功', formData.value);
     emit('onSearch', formData.value);
   } else {
     return ElMessage.warning('请正确输入后再进行提交');

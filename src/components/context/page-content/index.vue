@@ -7,11 +7,22 @@
     </div>
 
     <main class="rounded-md overflow-hidden bg-white">
-      <section class="flex justify-end py-3 pr-5">
-        <slot name="tools"></slot>
+      <section class="flex justify-between items-center py-3 px-5">
+        <slot name="tools-title">
+          <span class="font-bold text-lg">{{ title + '列表' }} </span>
+        </slot>
+        <div>
+          <slot name="tools"></slot>
+        </div>
       </section>
 
-      <Table :tableData="tableData.list" :columns="columns">
+      <Table
+        :tableData="tableData.list"
+        :columns="columns"
+        :pageInfo="{ ...pageInfo, total: tableData.total }"
+        @onPageChange="handleCurrentChange"
+        @onPageSizeChange="handleSizeChange"
+      >
         <template v-for="item in otherSlot" :key="item.key" #[item.slotName]="scope">
           <el-image
             v-if="item.slotName === 'image'"
@@ -29,25 +40,15 @@
           </template>
 
           <template v-else-if="item.slotName === 'handle'">
-            <el-button icon="el-icon-edit" type="text" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button icon="el-icon-delete" type="text" @click="handleDelete(scope.row)">删除</el-button>
+            <slot :name="item.slotName" :row="scope.row">
+              <el-button icon="el-icon-edit" type="text" @click="handleEdit(scope.row)">编辑</el-button>
+              <el-button icon="el-icon-delete" type="text" @click="handleDelete(scope.row)">删除</el-button>
+            </slot>
           </template>
 
           <slot v-else :name="item.slotName" :row="scope.row"></slot>
         </template>
       </Table>
-      <div class="flex justify-end py-3 pr-3">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pageInfo.page"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="pageInfo.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="tableData.total"
-        >
-        </el-pagination>
-      </div>
     </main>
   </div>
 </template>
@@ -55,6 +56,7 @@
 import { defineProps, defineEmits, onMounted, ref, reactive, watch } from 'vue';
 import { getListApi } from '@/service';
 import { Table, Form } from '@/components/context';
+import { useDelete } from '@/hooks';
 
 const emit = defineEmits(['onEdit', 'onDelete']);
 
@@ -90,16 +92,14 @@ const handleSearch = (values: any) => {
 // 重置
 const handleReset = (values: any) => getList();
 
-const handleSizeChange = (value: number) => {
-  console.log(value);
-  pageInfo.value.pageSize = value;
-};
-
-const handleCurrentChange = (value: number) => {
-  console.log(value);
-  pageInfo.value.page = value;
-};
+const handleSizeChange = (value: number) => (pageInfo.value.pageSize = value);
+const handleCurrentChange = (value: number) => (pageInfo.value.page = value);
 
 const handleEdit = (row: any) => emit('onEdit', row);
-const handleDelete = (row: any) => emit('onDelete', row);
+
+// 删除
+const handleDelete = async (row: { id: number | string }) => {
+  await useDelete(props.url, row.id, props.title);
+  getList();
+};
 </script>

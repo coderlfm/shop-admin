@@ -21,6 +21,7 @@ import {
   ElOption,
   ElPagination,
   ElConfigProvider,
+  ElSpace,
 } from 'element-plus';
 import 'element-plus/lib/theme-chalk/base.css';
 
@@ -45,7 +46,8 @@ const components = [
   ElSelect,
   ElOption,
   ElPagination,
-  ElConfigProvider
+  ElConfigProvider,
+  ElSpace,
 ];
 
 export default function (app: App) {

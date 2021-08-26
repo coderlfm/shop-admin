@@ -10,14 +10,33 @@
       </el-table-column>
     </template>
   </el-table>
+  <div class="flex justify-end py-3 pr-3">
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pageInfo.page"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="pageInfo.pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="pageInfo.total"
+    >
+    </el-pagination>
+  </div>
 </template>
 <script lang="ts" setup>
-import { defineProps } from 'vue';
+import { defineProps, defineEmits } from 'vue';
 defineProps<{
   tableConfig?: any;
   tableData: any[];
   columns: any[];
+  pageInfo: { page: number; pageSize: number; total: number };
 }>();
+
+const emit = defineEmits(['onPageChange', 'onPageSizeChange']);
+
+const handleSizeChange = (value: number) => emit('onPageSizeChange', value);
+
+const handleCurrentChange = (value: number) => emit('onPageChange', value);
 </script>
 <style lang="less" scoped>
 table {

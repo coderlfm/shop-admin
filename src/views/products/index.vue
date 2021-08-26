@@ -1,7 +1,7 @@
 <template>
   <div class="product">
     <PageContent
-      title="商品管理"
+      title="商品"
       url="product"
       :columns="columns"
       :form="form"
@@ -25,13 +25,13 @@
 import { ref, onMounted } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { PageContent } from '@/components/context';
-import { getCateogriesList } from '@/service';
+import { getCateogriesListAPI, removeProductByIdAPI } from '@/service';
 import { columns, form as defaultForm } from './config';
 
 const form = ref(defaultForm({}));
 
 onMounted(async () => {
-  const { data } = await getCateogriesList({ page: 1, pageSize: 1000 });
+  const { data } = await getCateogriesListAPI({ page: 1, pageSize: 1000 });
   form.value = defaultForm({ categoryOptions: data.list.map((item: any) => ({ label: item.title, value: item.id })) });
 });
 
@@ -47,6 +47,7 @@ const handleDelete = async (row: any) => {
   });
 
   console.log(row);
+  await removeProductByIdAPI(row.id);
   ElMessage.success('删除成功!');
 };
 </script>

@@ -2,11 +2,11 @@ import Request from '../request';
 import { IDataType } from '../type';
 
 enum CategoriesApi {
-  list = '',
+  list = 'category',
 }
 
 // 获取分类列表
-export const getCateogriesList: (data: { page: number; pageSize: number }) => Promise<IDataType> = ({
+export const getCateogriesListAPI: (data: { page: number; pageSize: number }) => Promise<IDataType> = ({
   page,
   pageSize,
-}) => Request.get({ url: `category?page=${page}&pageSize=${pageSize}` });
+}) => Request.get({ url: `${CategoriesApi.list}?page=${page}&pageSize=${pageSize}` });
