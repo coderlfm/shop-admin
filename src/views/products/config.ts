@@ -1,5 +1,6 @@
 export const columns = [
   { label: '商品id', key: 'id' },
+  { label: '所属分类', key: 'cateTitle' },
   { label: '商品名称', key: 'title' },
   { label: '商品数量', key: 'sum' },
   {
@@ -17,8 +18,8 @@ export const columns = [
 export const form = {
   search: [
     { label: 'id', prop: 'id' },
-    { label: '名称', prop: '名称' },
-    { label: '分类', prop: '分类' },
-    { label: '价格', prop: '价格' },
+    { label: '名称', prop: 'keyword' },
+    { label: '分类', prop: 'categoryId' },
+    { label: '价格', prop: 'price' },
   ],
 };

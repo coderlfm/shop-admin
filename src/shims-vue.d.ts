@@ -6,6 +6,8 @@ declare module '*.vue' {
 }
 
 declare let defineProps: any;
+declare let defineEmits: any;
+
 declare let $filters: {
   formatDate: (date: string) => string;
 };

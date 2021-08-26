@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
-          <Form :formList="form.search" />
+          <Form :formList="form.search" @onSearch="handleSearch" @onReset="handleReset" />
         </div>
       </template>
       <Table :tableData="tableData.list" :columns="columns">
@@ -53,10 +53,19 @@ const tableData = reactive<{ list: any[] }>({ list: [] });
 
 onMounted(() => getList());
 
-const getList = async () => {
-  const { data } = await getListApi(props.url, pageInfo.value);
+// 获取列表数据
+const getList = async (reqData = pageInfo.value) => {
+  const { data } = await getListApi(props.url, reqData);
   tableData.list = data.list;
 };
 
 const otherSlot = props.columns.filter((item) => item.slotName);
+
+// 搜索
+const handleSearch = (values: any) => {
+  getList({ ...pageInfo.value, ...values });
+};
+
+// 重置
+const handleReset = (values: any) => getList();
 </script>

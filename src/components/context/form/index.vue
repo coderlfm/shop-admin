@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-form :model="formData">
-      <el-row>
+    <el-form :model="formData" ref="formRef">
+      <el-row :gutter="20">
         <template v-for="item in formList" :key="item.prop">
           <el-col v-bind="colConfig">
             <el-form-item v-bind="item">
@@ -11,15 +11,21 @@
         </template>
       </el-row>
     </el-form>
+    <div class="flex flex-row-reverse">
+      <el-space>
+        <el-button @click="handleReset">重置</el-button>
+        <el-button type="primary" @click="handleSearch">搜索</el-button>
+      </el-space>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { withDefaults, defineProps, ref } from 'vue';
-import type ElCol from 'element-plus/es/el-col/src/col';
+import { withDefaults, defineEmits, defineProps, ref } from 'vue';
+import { ElForm, ElMessage } from 'element-plus';
 
 const props = withDefaults(
   defineProps<{
-    formList: any;
+    formList: any[];
     colConfig?: any;
   }>(),
   {
@@ -33,11 +39,31 @@ const props = withDefaults(
   },
 );
 
+const emit = defineEmits(['onSearch', 'onReset']);
+
 let formValue: { [name: string]: string } = {};
 
 props.formList.forEach((item: any) => {
   formValue[item.prop] = '';
 });
 const formData = ref(formValue);
+const formRef = ref<InstanceType<typeof ElForm>>();
+
+// 搜索
+const handleSearch = async () => {
+  const valid = await formRef.value?.validate();
+  if (valid) {
+    console.log('验证成功', formData.value);
+    emit('onSearch', formData.value);
+  } else {
+    return ElMessage.warning('请正确输入后再进行提交');
+  }
+};
+
+// 重置
+const handleReset = async () => {
+  formRef.value?.resetFields();
+  emit('onReset', formData.value);
+};
 </script>
 <style lang=""></style>
