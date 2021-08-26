@@ -17,6 +17,10 @@ import {
   ElImage,
   ElRow,
   ElCol,
+  ElSelect,
+  ElOption,
+  ElPagination,
+  ElConfigProvider,
 } from 'element-plus';
 import 'element-plus/lib/theme-chalk/base.css';
 
@@ -37,7 +41,11 @@ const components = [
   ElCard,
   ElImage,
   ElRow,
-  ElCol
+  ElCol,
+  ElSelect,
+  ElOption,
+  ElPagination,
+  ElConfigProvider
 ];
 
 export default function (app: App) {

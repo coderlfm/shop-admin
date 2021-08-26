@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" v-bind="tableConfig">
+  <el-table :data="tableData" v-bind="tableConfig" size="small ">
     <template v-for="item in columns" :key="item.key">
       <el-table-column v-bind="item" show-overflow-tooltip>
         <template #default="scope">

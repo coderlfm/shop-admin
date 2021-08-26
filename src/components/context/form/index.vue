@@ -2,10 +2,25 @@
   <div>
     <el-form :model="formData" ref="formRef">
       <el-row :gutter="20">
-        <template v-for="item in formList" :key="item.prop">
+        <template v-for="item in formList" :key="item.wrap.prop">
           <el-col v-bind="colConfig">
-            <el-form-item v-bind="item">
-              <el-input v-model="formData[item.prop]"></el-input>
+            <el-form-item v-bind="item.wrap">
+              <el-select
+                v-if="item.wrap.type === 'select'"
+                v-model="formData[item.wrap.prop]"
+                clearable
+                v-bind="item.props"
+              >
+                <el-option
+                  v-for="option in item.props.options"
+                  :key="option.value"
+                  :label="option.label"
+                  :value="option.value"
+                >
+                </el-option>
+              </el-select>
+
+              <el-input v-else v-model="formData[item.wrap.prop]" v-bind="item.props"></el-input>
             </el-form-item>
           </el-col>
         </template>
@@ -66,4 +81,10 @@ const handleReset = async () => {
   emit('onReset', formData.value);
 };
 </script>
-<style lang=""></style>
+<style lang="less" scoped>
+.el-form-item__content {
+  > * {
+    width: 100%;
+  }
+}
+</style>

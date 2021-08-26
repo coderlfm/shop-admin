@@ -1,11 +1,16 @@
 <template>
   <div class="page-content">
-    <el-card class="box-card">
-      <template #header>
-        <div class="card-header">
-          <Form :formList="form.search" @onSearch="handleSearch" @onReset="handleReset" />
-        </div>
-      </template>
+    <h2 class="text-left text-xl font-bold mb-3">{{ title }}</h2>
+
+    <div class="search-header p-5 mb-3 bg-white rounded-md">
+      <Form :formList="form.search" @onSearch="handleSearch" @onReset="handleReset" />
+    </div>
+
+    <main class="rounded-md overflow-hidden bg-white">
+      <section class="flex justify-end py-3 pr-5">
+        <slot name="tools"></slot>
+      </section>
+
       <Table :tableData="tableData.list" :columns="columns">
         <template v-for="item in otherSlot" :key="item.key" #[item.slotName]="scope">
           <el-image
@@ -24,20 +29,34 @@
           </template>
 
           <template v-else-if="item.slotName === 'handle'">
-            <el-button icon="el-icon-edit" type="text">编辑</el-button>
-            <el-button icon="el-icon-delete" type="text">删除</el-button>
+            <el-button icon="el-icon-edit" type="text" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button icon="el-icon-delete" type="text" @click="handleDelete(scope.row)">删除</el-button>
           </template>
 
           <slot v-else :name="item.slotName" :row="scope.row"></slot>
         </template>
       </Table>
-    </el-card>
+      <div class="flex justify-end py-3 pr-3">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageInfo.page"
+          :page-sizes="[10, 20, 50, 100]"
+          :page-size="pageInfo.pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="tableData.total"
+        >
+        </el-pagination>
+      </div>
+    </main>
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, onMounted, ref, reactive } from 'vue';
+import { defineProps, defineEmits, onMounted, ref, reactive, watch } from 'vue';
 import { getListApi } from '@/service';
 import { Table, Form } from '@/components/context';
+
+const emit = defineEmits(['onEdit', 'onDelete']);
 
 const props = defineProps<{
   title: string;
@@ -49,14 +68,16 @@ const props = defineProps<{
 }>();
 
 const pageInfo = ref({ page: 1, pageSize: 10 });
-const tableData = reactive<{ list: any[] }>({ list: [] });
+const tableData = reactive<{ list: any[]; total: number }>({ list: [], total: 0 });
 
 onMounted(() => getList());
+watch(pageInfo.value, () => getList());
 
 // 获取列表数据
 const getList = async (reqData = pageInfo.value) => {
   const { data } = await getListApi(props.url, reqData);
   tableData.list = data.list;
+  tableData.total = data.total;
 };
 
 const otherSlot = props.columns.filter((item) => item.slotName);
@@ -68,4 +89,17 @@ const handleSearch = (values: any) => {
 
 // 重置
 const handleReset = (values: any) => getList();
+
+const handleSizeChange = (value: number) => {
+  console.log(value);
+  pageInfo.value.pageSize = value;
+};
+
+const handleCurrentChange = (value: number) => {
+  console.log(value);
+  pageInfo.value.page = value;
+};
+
+const handleEdit = (row: any) => emit('onEdit', row);
+const handleDelete = (row: any) => emit('onDelete', row);
 </script>

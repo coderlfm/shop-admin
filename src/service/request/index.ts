@@ -1,5 +1,6 @@
 import axios from 'axios';
-import type { AxiosInstance } from 'axios';
+import type { AxiosInstance, AxiosError } from 'axios';
+import { ElMessage } from 'element-plus';
 import type { RequestInterceptors, RequestConfig } from './type';
 
 const DEAFULT_LOADING = true;
@@ -51,9 +52,11 @@ class Request {
         // this.loading?.close();
 
         const data = res.data;
-        if (data.code) {
-          console.log('请求失败~, 错误信息', data);
-          return data;
+        if (!data || data.code) {
+          const error  = (res as unknown as AxiosError).response?.data
+          console.log('请求失败~, 错误信息', error);
+          ElMessage.warning(error.message ?? '请求超时');
+          return Promise.reject(error);
         } else {
           return data;
         }
@@ -62,11 +65,15 @@ class Request {
         // 将loading移除
         // this.loading?.close();
 
+        console.log('err:', err.message);
+
+        // ElMessage.warning(err.message ?? '请求超时');
+
         // 例子: 判断不同的HttpErrorCode显示不同的错误信息
         if (err.response.status === 404) {
           console.log('404的错误~');
         }
-        return err;
+        return Promise.reject(err);
       },
     );
   }
@@ -92,6 +99,7 @@ class Request {
           }
           // 2.将showLoading设置true, 这样不会影响下一个请求
           // this.showLoading = DEAFULT_LOADING;
+          // console.log('then_res', res);
 
           // 3.将结果resolve返回出去
           resolve(res);
@@ -99,7 +107,8 @@ class Request {
         .catch((err) => {
           // 将showLoading设置true, 这样不会影响下一个请求
           // this.showLoading = DEAFULT_LOADING;
-          reject(err);
+          // console.log('rejevt_res', err);
+          // reject(err);
           return err;
         });
     });
