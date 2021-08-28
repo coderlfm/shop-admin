@@ -3,7 +3,7 @@
     <h2 class="text-left text-xl font-bold mb-3">{{ title }}</h2>
 
     <div class="search-header p-5 mb-3 bg-white rounded-md">
-      <Form :formList="form.search" @onSearch="handleSearch" @onReset="handleReset" />
+      <Form :formList="form.search" @onSubmit="handleSearch" @onReset="handleReset" />
     </div>
 
     <main class="rounded-md overflow-hidden bg-white">
@@ -39,12 +39,12 @@
             {{ $filters.formatDate(scope.row.updatedAt) }}
           </template>
 
-          <template v-else-if="item.slotName === 'handle'">
+          <!-- <template v-else-if="item.slotName === 'handle'">
             <slot :name="item.slotName" :row="scope.row">
               <el-button icon="el-icon-edit" type="text" @click="handleEdit(scope.row)">编辑</el-button>
               <el-button icon="el-icon-delete" type="text" @click="handleDelete(scope.row)">删除</el-button>
             </slot>
-          </template>
+          </template> -->
 
           <slot v-else :name="item.slotName" :row="scope.row"></slot>
         </template>
@@ -53,24 +53,22 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, defineEmits, onMounted, ref, reactive, watch } from 'vue';
+import { defineProps, defineEmits, defineExpose, onMounted, ref, reactive, watch } from 'vue';
 import { getListApi } from '@/service';
-import { Table, Form } from '@/components/context';
-import { useDelete } from '@/hooks';
+import { Table, Form, Dialog } from '@/components/context';
+// import { useDelete } from '@/hooks';
 
-const emit = defineEmits(['onEdit', 'onDelete']);
+// const emit = defineEmits(['onEdit', 'onDelete']);
 
 const props = defineProps<{
   title: string;
   url: string;
   columns: any[];
-  form: {
-    search: any[];
-  };
+  form: { search: any[] };
 }>();
 
-const pageInfo = ref({ page: 1, pageSize: 10 });
-const tableData = reactive<{ list: any[]; total: number }>({ list: [], total: 0 });
+const pageInfo = ref({ page: 1, pageSize: 10 }); // 搜索
+const tableData = reactive<{ list: any[]; total: number }>({ list: [], total: 0 }); // 展示数据
 
 onMounted(() => getList());
 watch(pageInfo.value, () => getList());
@@ -95,11 +93,7 @@ const handleReset = (values: any) => getList();
 const handleSizeChange = (value: number) => (pageInfo.value.pageSize = value);
 const handleCurrentChange = (value: number) => (pageInfo.value.page = value);
 
-const handleEdit = (row: any) => emit('onEdit', row);
-
-// 删除
-const handleDelete = async (row: { id: number | string }) => {
-  await useDelete(props.url, row.id, props.title);
-  getList();
-};
+defineExpose({
+  getList,
+});
 </script>

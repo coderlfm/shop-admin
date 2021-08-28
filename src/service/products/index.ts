@@ -1,7 +1,7 @@
 import Request from '../request';
 import { IDataType } from '../type';
 
-enum ProductsApi {
+export enum ProductsApi {
   product = 'product',
 }
 

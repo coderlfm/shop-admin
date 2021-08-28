@@ -20,5 +20,6 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'prettier/prettier': ['warn', { singleQuote: true }],
     '@typescript-eslint/no-empty-function': 'warn',
+    'vue/no-unused-vars': 'warn',
   },
 };

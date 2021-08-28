@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="formData" ref="formRef">
+    <el-form :model="formData" ref="formRef" v-bind="formProps">
       <el-row :gutter="20">
         <template v-for="item in formList" :key="item.wrap.prop">
           <el-col v-bind="colConfig">
@@ -28,47 +28,81 @@
     </el-form>
     <div class="flex flex-row-reverse">
       <el-space>
-        <el-button @click="handleReset">重置</el-button>
-        <el-button type="primary" @click="handleSearch">搜索</el-button>
+        <el-button @click="handleReset">{{ config.cancelText }}</el-button>
+        <el-button type="primary" @click="handleSubmit">{{ config.okText }}</el-button>
       </el-space>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { withDefaults, defineEmits, defineProps, ref } from 'vue';
+import { withDefaults, watch, defineEmits, defineProps, ref } from 'vue';
 import { ElForm, ElMessage } from 'element-plus';
+import FormType from 'element-plus/lib/el-form/src/form.vue';
 
 const props = withDefaults(
   defineProps<{
     formList: any[];
-    colConfig?: any;
+    defaultFormVal?: any;
+    colConfig: {
+      xl?: number;
+      lg?: number;
+      md?: number;
+      sm?: number;
+      xs?: number;
+    };
+    formProps?: any;
+    config?: {
+      okText?: string;
+      cancelText?: string;
+    };
   }>(),
   {
-    colConfig: {
+    colConfig: () => ({
       xl: 6, // >1920px 4个
       lg: 8,
       md: 12,
       sm: 24,
       xs: 24,
-    },
+    }),
+    config: () => ({
+      okText: '搜索',
+      cancelText: '重置',
+    }),
   },
 );
 
-const emit = defineEmits(['onSearch', 'onReset']);
+const emit = defineEmits(['onSubmit', 'onReset']);
 
-let formValue: { [name: string]: string } = {};
+const setDefault = (type: 'create' | 'update' = 'create', souce?: any) => {
+  let formValue: { [name: string]: string } = {};
+  props.formList.forEach((item: any) => {
+    if (type === 'create') item.wrap.prop && (formValue[item.wrap.prop] = '');
+    if (type === 'update') item.wrap.prop && (formValue[item.wrap.prop] = souce[item.wrap.prop]);
+  });
+  return formValue;
+};
+const formData = ref(setDefault('create')); // 表单内容
+const formRef = ref<InstanceType<typeof ElForm>>(); // 表单 ref
 
-props.formList.forEach((item: any) => {
-  formValue[item.prop] = '';
-});
-const formData = ref(formValue);
-const formRef = ref<InstanceType<typeof ElForm>>();
+watch(
+  () => props.defaultFormVal,
+  () => {
+    console.log('变化');
+    if (props.defaultFormVal && Object.keys(props.defaultFormVal).length)
+      formData.value = setDefault('update', props.defaultFormVal);
+  },
+  {
+    immediate: true,
+  },
+);
 
 // 搜索
-const handleSearch = async () => {
+const handleSubmit = async () => {
   const valid = await formRef.value?.validate();
   if (valid) {
-    emit('onSearch', formData.value);
+    emit('onSubmit', formData.value, () => {
+      formRef.value?.resetFields();
+    });
   } else {
     return ElMessage.warning('请正确输入后再进行提交');
   }
