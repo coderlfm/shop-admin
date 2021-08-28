@@ -53,7 +53,7 @@ class Request {
 
         const data = res.data;
         if (!data || data.code) {
-          const error  = (res as unknown as AxiosError).response?.data
+          const error = (res as unknown as AxiosError).response?.data;
           console.log('请求失败~, 错误信息', error);
           ElMessage.warning(error.message ?? '请求超时');
           return Promise.reject(error);
@@ -89,6 +89,11 @@ class Request {
       // if (config.showLoading === false) {
       //   this.showLoading = config.showLoading;
       // }
+      if (config.data) {
+        for (const key in config.data) {
+          if (config.data[key] === '') config.data[key] = undefined;
+        }
+      }
 
       this.instance
         .request<any, T>(config)

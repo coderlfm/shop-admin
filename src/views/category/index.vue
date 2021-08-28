@@ -7,7 +7,7 @@
       </template>
 
       <template v-slot:tools>
-        <el-button @click="handleCreate">新增分类</el-button>
+        <el-button type="primary" @click="handleCreate">新增分类</el-button>
       </template>
     </PageContent>
 

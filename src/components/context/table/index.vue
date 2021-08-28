@@ -4,7 +4,7 @@
     <el-table-column v-if="showSelection" type="selection" align="center" width="60" />
 
     <template v-for="item in columns" :key="item.key">
-      <el-table-column v-bind="item" show-overflow-tooltip>
+      <el-table-column v-bind="item">
         <template #default="scope">
           <slot :name="item.slotName" :row="scope.row">
             {{ scope.row[item.key] }}

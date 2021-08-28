@@ -31,9 +31,9 @@
       </template>
 
       <template v-slot:tools>
-        <el-button @click="handleUnFreeze">上架</el-button>
-        <el-button @click="handleFreeze">下架</el-button>
-        <el-button @click="handleCreate">新增商品</el-button>
+        <el-button type="primary" @click="handleUnFreeze">上架</el-button>
+        <el-button type="primary" @click="handleFreeze">下架</el-button>
+        <el-button type="primary" @click="handleCreate">新增商品</el-button>
       </template>
     </PageContent>
 
@@ -49,6 +49,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
+import { ElMessage } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
 import { getCateogriesListAPI, ProductsApi } from '@/service';
 import { usePageConent, checkStatusAction } from '@/hooks';
@@ -113,6 +114,7 @@ const handleFreeze = async () => checkStatus('下架所选商品', '0');
 const handleUnFreeze = () => checkStatus('上架所选商品', '1');
 
 const checkStatus = async (title: string, status: '0' | '1') => {
+  if (!selectRows.value?.length) return ElMessage.warning('请先勾选需要操作的数据');
   const data = {
     productIds: selectRows.value?.map((item: any) => item.id),
     status,
