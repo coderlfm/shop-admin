@@ -35,7 +35,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { withDefaults, watch, defineEmits, defineProps, ref } from 'vue';
+import { withDefaults, watch, defineEmits, defineProps, defineExpose, ref } from 'vue';
 import { ElForm, ElMessage } from 'element-plus';
 import FormType from 'element-plus/lib/el-form/src/form.vue';
 
@@ -43,7 +43,7 @@ const props = withDefaults(
   defineProps<{
     formList: any[];
     defaultFormVal?: any;
-    colConfig: {
+    colConfig?: {
       xl?: number;
       lg?: number;
       md?: number;
@@ -96,23 +96,32 @@ watch(
   },
 );
 
-// 搜索
+// 搜索/提交按钮
 const handleSubmit = async () => {
   const valid = await formRef.value?.validate();
+  console.log('valid');
+
   if (valid) {
-    emit('onSubmit', formData.value, () => {
-      formRef.value?.resetFields();
-    });
+    emit('onSubmit', formData.value);
   } else {
     return ElMessage.warning('请正确输入后再进行提交');
   }
 };
 
-// 重置
+// 重置按钮
 const handleReset = async () => {
-  formRef.value?.resetFields();
+  resetFormFidlds();
   emit('onReset', formData.value);
 };
+
+const resetFormFidlds = () => {
+  formData.value = setDefault('create');
+  formRef.value?.resetFields();
+};
+
+defineExpose({
+  resetFormFidlds,
+});
 </script>
 <style lang="less" scoped>
 .el-form-item__content {

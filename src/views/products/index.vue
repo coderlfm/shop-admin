@@ -28,27 +28,25 @@
       :title="title"
       :defaultFormVal="defaultFormVal"
       v-bind="modeFormlConfig"
-      @onSubmit="handleSubmit"
+      @onCreate="handleDialogCreate"
+      @onEdit="handleDialogEdit"
     />
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, provide } from 'vue';
+import { ref, onMounted } from 'vue';
 import { PageContent, Dialog } from '@/components/context';
 import { getCateogriesListAPI, ProductsApi } from '@/service';
-import { useDelete, usePageConent, useCreate } from '@/hooks';
+import { usePageConent } from '@/hooks';
 import { columns, form as defaultForm, model as defaultModel } from './config';
-
-import Test from './test.vue';
 
 const form = ref(defaultForm({})); // 搜索表单配置
 const modeFormlConfig = ref(defaultModel({})); // 编辑弹框表单配置
-const defaultFormVal = ref({}); // 新增/编辑 默认值
-
-const [pageContentRef, pageDialogRef] = usePageConent();
+const defaultFormVal = ref<any>({}); // 新增/编辑表单 默认值
 
 const url = ProductsApi.product;
 const title = '商品';
+const { pageContentRef, pageDialogRef, pageContentCreate, pageContentEdit, pageContentDelete } = usePageConent({ url });
 
 onMounted(async () => {
   const { data } = await getCateogriesListAPI({ page: 1, pageSize: 1000 });
@@ -61,6 +59,16 @@ onMounted(async () => {
 // 格式化分类数组
 const formatCategory = (data: any[]) => data.map((item: any) => ({ label: item.title, value: item.id }));
 
+// 新增按钮
+const handleCreate = async () => {
+  (pageDialogRef.value as any).dialogVisible = true;
+};
+
+// 新增 提交
+const handleDialogCreate = async (values: any) => {
+  await pageContentCreate(values);
+};
+
 // 编辑按钮
 const handleEdit = (row: any) => {
   const categoryIds = row.categories?.map((item: any) => item.id) ?? [];
@@ -68,21 +76,13 @@ const handleEdit = (row: any) => {
   (pageDialogRef.value as any).dialogVisible = true;
 };
 
-// 删除
+// 编辑 提交
+const handleDialogEdit = async (values: any) => {
+  await pageContentEdit(defaultFormVal.value.id, values);
+};
+
+// 删除 提交
 const handleDelete = async (row: { id: number | string }) => {
-  await useDelete(url, row.id, '商品');
-  (pageContentRef.value as any).getList();
-};
-
-// 新增按钮
-const handleCreate = async () => {
-  (pageDialogRef.value as any).dialogVisible = true;
-};
-
-// 新增/编辑 提交
-const handleSubmit = async (values: any, cb: () => void) => {
-  await useCreate({ url, data: values });
-  cb();
-  (pageContentRef.value as any).getList();
+  await pageContentDelete(row.id);
 };
 </script>

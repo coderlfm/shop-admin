@@ -21,5 +21,6 @@ module.exports = {
     'prettier/prettier': ['warn', { singleQuote: true }],
     '@typescript-eslint/no-empty-function': 'warn',
     'vue/no-unused-vars': 'warn',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
 };

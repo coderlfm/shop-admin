@@ -1,6 +1,7 @@
 <template lang="">
   <el-dialog :title="(config.okText === '保存' ? '编辑' : '新增') + title" v-model="dialogVisible">
     <Form
+      ref="formRef"
       :formList="formList"
       :colConfig="{ lg: 24 }"
       :formProps="formProps"
@@ -11,7 +12,7 @@
   </el-dialog>
 </template>
 <script lang="ts" setup>
-import { ref, withDefaults, watch, defineProps, defineExpose, defineEmits, toRef } from 'vue';
+import { ref, withDefaults, watch, defineProps, defineExpose, defineEmits } from 'vue';
 import { Form } from '@/components/context';
 
 const props = withDefaults(
@@ -35,32 +36,30 @@ const props = withDefaults(
   },
 );
 
-const emit = defineEmits(['onSubmit']);
+const emit = defineEmits(['onCreate', 'onEdit']);
 
 const dialogVisible = ref(false); // 弹出框
+const formRef = ref<InstanceType<typeof Form>>(); // 弹出框
 const config = ref(props.config); // 底部配置
 
 // 默认值发生变化，点击编辑按钮时触发
-
 watch(
   () => props.defaultFormVal,
   () => {
-    console.log('dialog编辑');
-    if (props.defaultFormVal && Object.keys(props.defaultFormVal).length) {
-      config.value.okText = '保存';
-    }
+    if (Object.keys(props.defaultFormVal).length) config.value.okText = '保存';
   },
   { immediate: true },
 );
 
-const handleSubmit = async (values: any, cb: () => void) =>
-  emit('onSubmit', values, () => {
-    dialogVisible.value = false;
-    cb();
-  });
+// 新增/编辑
+const handleSubmit = async (values: any) => {
+  let emitType: 'onCreate' | 'onEdit' = Object.keys(props.defaultFormVal).length ? 'onEdit' : 'onCreate';
+  emit(emitType, values);
+};
 
 defineExpose({
   dialogVisible,
+  formRef,
 });
 </script>
 <style lang=""></style>
