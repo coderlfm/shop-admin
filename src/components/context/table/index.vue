@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" v-bind="tableConfig" size="small" row-key="id" @select="handleSelect">
+  <el-table :data="tableData" v-bind="tableConfig" row-key="id" @select="handleSelect">
     <!-- 多选框 -->
     <el-table-column v-if="showSelection" type="selection" align="center" width="60" />
 

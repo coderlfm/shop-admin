@@ -12,7 +12,7 @@
 
         <el-submenu :index="item.path" v-if="item.children" >
           <template #title>
-            <i class="el-icon-location"></i>
+            <i :class="item.icon"></i>
             <span > {{ item.title }} </span>
           </template>
           <!-- 暂时只支持2级菜单 -->
@@ -20,7 +20,7 @@
         </el-submenu>
 
         <el-menu-item :index="item.path" v-else @click="handleMenuItemClick(item.path)">
-          <i class="el-icon-setting"></i>
+          <i :class="item.icon"></i>
           <template #title> {{ item.title }} </template>
         </el-menu-item>
 
@@ -44,7 +44,11 @@ const handleClose = (key:any, keyPath:any) => {
   console.log(key, keyPath);
 };
 
-const handleMenuItemClick = (path:string) => router.push(path)
+const handleMenuItemClick = (path:string) => {
+  console.log(path);
+  router.push(path)
+
+}
 
 // console.log(router.getRoutes());
 </script>

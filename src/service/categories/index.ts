@@ -1,7 +1,7 @@
 import Request from '../request';
 import { IDataType } from '../type';
 
-enum CategoriesApi {
+export enum CategoriesApi {
   list = 'category',
 }
 
