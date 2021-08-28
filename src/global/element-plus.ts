@@ -23,6 +23,7 @@ import {
   ElConfigProvider,
   ElSpace,
   ElDialog,
+  ElTag,
 
 } from 'element-plus';
 import 'element-plus/lib/theme-chalk/base.css';
@@ -51,6 +52,7 @@ const components = [
   ElConfigProvider,
   ElSpace,
   ElDialog,
+  ElTag,
 ];
 
 export default function (app: App) {

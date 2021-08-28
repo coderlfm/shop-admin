@@ -1,6 +1,10 @@
 <template>
   <div class="product">
     <PageContent ref="pageContentRef" :title="title" :url="url" :columns="columns" :form="form">
+      <template #categories="scope">
+        <el-tag v-for="item in scope.row.categories" :key="item.id" size="small"> {{ item.title }}</el-tag>
+      </template>
+
       <template #discountPrice="scope">
         <span class="text-red-500">￥{{ scope.row.discountPrice }} </span>
       </template>
@@ -23,8 +27,7 @@
       :url="url"
       :title="title"
       :defaultFormVal="defaultFormVal"
-      v-if="defaultModel()"
-      v-bind="defaultModel()"
+      v-bind="modeFormlConfig"
       @onSubmit="handleSubmit"
     />
   </div>
@@ -38,7 +41,8 @@ import { columns, form as defaultForm, model as defaultModel } from './config';
 
 import Test from './test.vue';
 
-const form = ref(defaultForm({})); // 搜索表单
+const form = ref(defaultForm({})); // 搜索表单配置
+const modeFormlConfig = ref(defaultModel({})); // 编辑弹框表单配置
 const defaultFormVal = ref({}); // 新增/编辑 默认值
 
 const [pageContentRef, pageDialogRef] = usePageConent();
@@ -48,20 +52,25 @@ const title = '商品';
 
 onMounted(async () => {
   const { data } = await getCateogriesListAPI({ page: 1, pageSize: 1000 });
-  form.value = defaultForm({ categoryOptions: data.list.map((item: any) => ({ label: item.title, value: item.id })) });
+  const categoryOptions = formatCategory(data.list);
+
+  form.value = defaultForm({ categoryOptions });
+  modeFormlConfig.value = defaultModel({ categoryOptions });
 });
 
+// 格式化分类数组
+const formatCategory = (data: any[]) => data.map((item: any) => ({ label: item.title, value: item.id }));
+
+// 编辑按钮
 const handleEdit = (row: any) => {
-  console.log('编辑', row);
-  defaultFormVal.value = row;
+  const categoryIds = row.categories?.map((item: any) => item.id) ?? [];
+  defaultFormVal.value = { ...row, categoryIds };
   (pageDialogRef.value as any).dialogVisible = true;
 };
 
 // 删除
 const handleDelete = async (row: { id: number | string }) => {
   await useDelete(url, row.id, '商品');
-  console.log(pageContentRef.value);
-
   (pageContentRef.value as any).getList();
 };
 
@@ -74,5 +83,6 @@ const handleCreate = async () => {
 const handleSubmit = async (values: any, cb: () => void) => {
   await useCreate({ url, data: values });
   cb();
+  (pageContentRef.value as any).getList();
 };
 </script>

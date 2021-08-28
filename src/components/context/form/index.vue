@@ -74,9 +74,9 @@ const props = withDefaults(
 const emit = defineEmits(['onSubmit', 'onReset']);
 
 const setDefault = (type: 'create' | 'update' = 'create', souce?: any) => {
-  let formValue: { [name: string]: string } = {};
+  let formValue: { [name: string]: string | undefined } = {};
   props.formList.forEach((item: any) => {
-    if (type === 'create') item.wrap.prop && (formValue[item.wrap.prop] = '');
+    if (type === 'create') item.wrap.prop && (formValue[item.wrap.prop] = undefined);
     if (type === 'update') item.wrap.prop && (formValue[item.wrap.prop] = souce[item.wrap.prop]);
   });
   return formValue;
