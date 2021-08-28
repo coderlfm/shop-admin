@@ -19,6 +19,11 @@
                 >
                 </el-option>
               </el-select>
+              <el-cascader
+                v-else-if="item.wrap.type === 'cascader'"
+                v-model="formData[item.wrap.prop]"
+                v-bind="item.props"
+              ></el-cascader>
 
               <el-input v-else v-model="formData[item.wrap.prop]" v-bind="item.props"></el-input>
             </el-form-item>
@@ -121,7 +126,7 @@ defineExpose({
 });
 </script>
 <style lang="less" scoped>
-.el-form-item__content {
+.el-form-item /deep/ .el-form-item__content {
   > * {
     width: 100%;
   }

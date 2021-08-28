@@ -24,7 +24,7 @@ import {
   ElSpace,
   ElDialog,
   ElTag,
-
+  ElCascader,
 } from 'element-plus';
 import 'element-plus/lib/theme-chalk/base.css';
 
@@ -53,6 +53,7 @@ const components = [
   ElSpace,
   ElDialog,
   ElTag,
+  ElCascader,
 ];
 
 export default function (app: App) {

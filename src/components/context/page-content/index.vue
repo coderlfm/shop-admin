@@ -2,7 +2,7 @@
   <div class="page-content">
     <h2 class="text-left text-xl font-bold mb-3">{{ title + '管理' }}</h2>
 
-    <div class="search-header p-5 mb-3 bg-white rounded-md">
+    <div class="search-header p-5 mb-3 bg-white rounded-md" v-if="form.search && form.search.length">
       <Form :formList="form.search" @onSubmit="handleSearch" @onReset="handleReset" />
     </div>
 
