@@ -1,14 +1,25 @@
 <template>
   <div class="orders">
     <PageContent ref="pageContentRef" :title="title" :url="url" :columns="columns" :form="form">
-      <template #snapshoot="scope">
-        <p v-for="item in scope.row.snapshoot.products" :key="item.productId">商品名称：{{ item.title }}</p>
+      <template #expand="scope">
+        <div class="expand-product flex mb-7" v-for="item in scope.row.snapshoot.products" :key="item.productId">
+          <img :src="item.coverUrl" />
+          <div>商品名称: {{ item.title }}</div>
+          <div class="flex">
+            商品价格:
+            <span class="text-red-500"> ￥{{ item.discountPrice }}</span>
+            <span class="text-gray-500 line-through ml-2"> ￥{{ item.marketPrice }}</span>
+          </div>
+          <div>商品数量: {{ item.count }}</div>
+          <div>
+            小计: <span class="text-red-500"> ￥{{ item.totalPrice }}</span>
+          </div>
+        </div>
       </template>
 
-      <template #discountPrice="scope">
-        <span class="text-red-500">￥{{ scope.row.discountPrice }} </span>
+      <template #totalPrice="scope">
+        <span class="text-red-500">￥{{ scope.row.totalPrice }} </span>
       </template>
-      <template #marketPrice="scope">￥{{ scope.row.marketPrice }}</template>
 
       <template #status="scope">
         <el-tag v-if="scope.row.status === '1'" type="info" size="small" effect="dark"> 待付款 </el-tag>
@@ -72,3 +83,14 @@ const handleDelete = async (row: { id: number | string }) => {
   await pageContentDelete(row.id);
 };
 </script>
+<style lang="less" scoped>
+.expand-product {
+  > * {
+    margin-right: 50px;
+  }
+  img {
+    width: 50px;
+    // height: ;
+  }
+}
+</style>

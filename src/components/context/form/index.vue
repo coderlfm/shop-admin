@@ -58,7 +58,7 @@ const props = withDefaults(
   }>(),
   {
     colConfig: () => ({
-      xl: 6, // >1920px 4个
+      xl: 8, // >1920px 4个
       lg: 8,
       md: 12,
       sm: 24,
