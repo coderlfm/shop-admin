@@ -87,7 +87,6 @@ const formRef = ref<InstanceType<typeof ElForm>>(); // 表单 ref
 watch(
   () => props.defaultFormVal,
   () => {
-    console.log('变化');
     if (props.defaultFormVal && Object.keys(props.defaultFormVal).length)
       formData.value = setDefault('update', props.defaultFormVal);
   },
@@ -99,8 +98,6 @@ watch(
 // 搜索/提交按钮
 const handleSubmit = async () => {
   const valid = await formRef.value?.validate();
-  console.log('valid');
-
   if (valid) {
     emit('onSubmit', formData.value);
   } else {

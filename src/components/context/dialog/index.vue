@@ -1,5 +1,9 @@
 <template lang="">
-  <el-dialog :title="(config.okText === '保存' ? '编辑' : '新增') + title" v-model="dialogVisible">
+  <el-dialog
+    custom-class="dialog-wrap"
+    :title="(config.okText === '保存' ? '编辑' : '新增') + title"
+    v-model="dialogVisible"
+  >
     <Form
       ref="formRef"
       :formList="formList"
@@ -17,7 +21,6 @@ import { Form } from '@/components/context';
 
 const props = withDefaults(
   defineProps<{
-    url: string;
     formProps: any;
     formList: any[];
     title?: string;
@@ -62,4 +65,9 @@ defineExpose({
   formRef,
 });
 </script>
-<style lang=""></style>
+<style lang="less">
+.dialog-wrap {
+  padding: 0 20px;
+  width: 600px !important;
+}
+</style>

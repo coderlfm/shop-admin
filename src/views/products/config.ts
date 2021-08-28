@@ -1,6 +1,7 @@
 import type { Option } from '@/types';
 
 export const columns = [
+  // { type: 'selection' },
   { label: '商品id', key: 'id' },
   { label: '所属分类', key: 'categories', slotName: 'categories' },
   { label: '商品名称', key: 'title' },
@@ -8,6 +9,7 @@ export const columns = [
   { label: '封面图', key: 'coverUrl', slotName: 'image' },
   { label: '优惠价', key: 'discountPrice', slotName: 'discountPrice' },
   { label: '原价', key: 'marketPrice', slotName: 'marketPrice' },
+  { label: '状态', key: 'status', slotName: 'status' },
   { label: '创建时间', key: 'createdAt', slotName: 'createdAt' },
   { label: '更新时间', key: 'updatedAt', slotName: 'updatedAt' },
   { label: '操作', key: '', slotName: 'handle' },
