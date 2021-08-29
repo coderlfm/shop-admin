@@ -69,8 +69,8 @@ const handleDialogCreate = async (values: any) => {
 
 // 编辑按钮
 const handleEdit = (row: any) => {
-  const permissionIds = row.permissions?.map((item: any) => item.id) || [];
-  defaultFormVal.value = { ...row, permissionIds };
+  const roleId = row.role.id;
+  defaultFormVal.value = { ...row, roleId };
   (pageDialogRef.value as any).dialogVisible = true;
 };
 

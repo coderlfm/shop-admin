@@ -3,7 +3,7 @@ import type { Option } from '@/types';
 export const columns = [
   { label: 'id', key: 'id' },
   { label: '账号', key: 'account' },
-  { label: '使用者', key: 'name' },
+  { label: '使用人', key: 'name' },
   { label: '账号备注', key: 'remark' },
   { label: '所属角色', key: 'role', slotName: 'role' },
   { label: '创建时间', key: 'createdAt', slotName: 'createdAt' },
@@ -12,7 +12,7 @@ export const columns = [
 ];
 
 export const form = () => ({
-  search: [{ wrap: { label: '角色名称', prop: 'roleName' }, props: { placeholder: '请输入角色名称' } }],
+  search: [],
 });
 
 export const model = ({ roleOptions = [] }: { roleOptions?: Option[] }) => ({
@@ -26,7 +26,7 @@ export const model = ({ roleOptions = [] }: { roleOptions?: Option[] }) => ({
   },
   formList: [
     { wrap: { label: '账号名', prop: 'account' }, props: { placeholder: '请输入账号名' } },
-    { wrap: { label: '使用者', prop: 'name' }, props: { placeholder: '请输入账号使用者' } },
+    { wrap: { label: '使用人', prop: 'name' }, props: { placeholder: '请输入账号使用人' } },
     {
       wrap: { label: '归属角色', prop: 'roleId', type: 'select' },
       props: { placeholder: '请选择账号归属角色', options: roleOptions },
