@@ -49,10 +49,19 @@ const config = ref(props.config); // 底部配置
 watch(
   () => props.defaultFormVal,
   () => {
-    if (Object.keys(props.defaultFormVal).length) config.value.okText = '保存';
+    if (Object.keys(props.defaultFormVal).length) {
+      config.value.okText = '保存';
+    } else {
+      config.value.okText = '新增';
+    }
   },
   { immediate: true },
 );
+
+// 关闭 dialog 时清空表单
+watch(dialogVisible, (newVal) => {
+  if (newVal === false) (formRef.value as any).resetFormFidlds();
+});
 
 // 新增/编辑
 const handleSubmit = async (values: any) => {

@@ -39,6 +39,7 @@ const { pageContentRef, pageDialogRef, pageContentCreate, pageContentEdit, pageC
 
 // 新增按钮
 const handleCreate = async () => {
+  defaultFormVal.value = {};
   (pageDialogRef.value as any).dialogVisible = true;
 };
 

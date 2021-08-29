@@ -17,7 +17,13 @@ export const form = ({ categoryOptions = [] }: { categoryOptions?: Option[] }) =
   search: [],
 });
 
-export const model = ({ interfaceOptions = [] }: { interfaceOptions?: Option[] }) => ({
+export const model = ({
+  interfaceOptions = [],
+  typeSelectChange,
+}: {
+  interfaceOptions?: Option[];
+  typeSelectChange: (val: any) => void;
+}) => ({
   formProps: {
     'label-width': 100,
     rules: {
@@ -37,9 +43,10 @@ export const model = ({ interfaceOptions = [] }: { interfaceOptions?: Option[] }
         placeholder: '请选择权限类型',
         options: [
           { label: '操作权限', value: 0 },
-          { label: '1 级权限', value: 1 },
-          { label: '2 级权限', value: 2 },
+          { label: '1 级菜单', value: 1 },
+          { label: '2 级菜单', value: 2 },
         ],
+        change: typeSelectChange,
       },
     },
     {
@@ -49,11 +56,12 @@ export const model = ({ interfaceOptions = [] }: { interfaceOptions?: Option[] }
         options: interfaceOptions,
         filterable: true,
         clearable: true,
-        props: { expandTrigger: 'hover', label: 'description', value: 'url' },
+        props: { expandTrigger: 'hover', emitPath: false, label: 'description', value: 'url' },
       },
+      hidden: false,
     },
-    { wrap: { label: '父级权限', prop: 'pId' }, props: { placeholder: '请输入图标类名' } },
-    { wrap: { label: '权限图标', prop: 'icon' }, props: { placeholder: '请输入图标类名' } },
-    { wrap: { label: '路由路径', prop: 'path' }, props: { placeholder: '请输入路由路径' } },
+    { wrap: { label: '父级权限', prop: 'pId' }, props: { placeholder: '请输入图标类名' }, hidden: false },
+    { wrap: { label: '权限图标', prop: 'icon' }, props: { placeholder: '请输入图标类名' }, hidden: false },
+    { wrap: { label: '路由路径', prop: 'path' }, props: { placeholder: '请输入路由路径' }, hidden: false },
   ],
 });

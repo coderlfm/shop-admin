@@ -77,6 +77,7 @@ const formatCategory = (data: any[]) => data.map((item: any) => ({ label: item.t
 
 // 新增按钮
 const handleCreate = async () => {
+  defaultFormVal.value = {};
   (pageDialogRef.value as any).dialogVisible = true;
 };
 

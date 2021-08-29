@@ -3,13 +3,14 @@
     <el-form :model="formData" ref="formRef" v-bind="formProps">
       <el-row :gutter="20">
         <template v-for="item in formList" :key="item.wrap.prop">
-          <el-col v-bind="colConfig">
+          <el-col v-bind="colConfig" v-if="!item.hidden">
             <el-form-item v-bind="item.wrap">
               <el-select
                 v-if="item.wrap.type === 'select'"
                 v-model="formData[item.wrap.prop]"
                 clearable
                 v-bind="item.props"
+                @change="item.props.change"
               >
                 <el-option
                   v-for="option in item.props.options"
@@ -127,7 +128,7 @@ defineExpose({
 </script>
 <style lang="less" scoped>
 .el-form-item /deep/ .el-form-item__content {
-  > * {
+  > *:not(.el-form-item__error) {
     width: 100%;
   }
 }
