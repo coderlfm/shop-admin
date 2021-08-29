@@ -39,7 +39,6 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { ElMessage } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
 import { getInterfaceListApi, PermissionApi } from '@/service';
 import { usePageConent, checkStatusAction } from '@/hooks';
