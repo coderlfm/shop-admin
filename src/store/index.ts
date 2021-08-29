@@ -14,7 +14,6 @@ const store = createStore({
   actions: {
     async changePermissionAction({ commit }) {
       const { code, data } = await getPermissionApi();
-      console.log(code, data);
       commit('changePermission', data);
     },
   },

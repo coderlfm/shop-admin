@@ -91,7 +91,6 @@ class Request {
       // }
 
       // console.log(JSON.stringify(JSON.parse(config)));
-      console.log(config);
 
       if (config.data) {
         for (const key in config.data) {
