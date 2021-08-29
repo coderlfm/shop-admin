@@ -89,6 +89,10 @@ class Request {
       // if (config.showLoading === false) {
       //   this.showLoading = config.showLoading;
       // }
+
+      // console.log(JSON.stringify(JSON.parse(config)));
+      console.log(config);
+
       if (config.data) {
         for (const key in config.data) {
           if (config.data[key] === '') config.data[key] = undefined;

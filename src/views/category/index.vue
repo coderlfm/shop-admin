@@ -50,8 +50,7 @@ const handleDialogCreate = async (values: any) => {
 
 // 编辑按钮
 const handleEdit = (row: any) => {
-  const categoryIds = row.categories?.map((item: any) => item.id) ?? [];
-  defaultFormVal.value = { ...row, categoryIds };
+  defaultFormVal.value = row;
   (pageDialogRef.value as any).dialogVisible = true;
 };
 

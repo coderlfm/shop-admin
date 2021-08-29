@@ -1,6 +1,13 @@
 <template>
   <div class="product">
-    <PageContent ref="pageContentRef" :title="title" :url="url" :columns="columns" :form="form">
+    <PageContent
+      ref="pageContentRef"
+      :title="title"
+      :url="url"
+      :columns="columns"
+      :form="form"
+      :pageInfo="{ page: 1, pageSize: 20 }"
+    >
       <template #icon="scope">
         <i :class="scope.row.icon" /><span>{{ scope.row.icon }}</span>
       </template>
@@ -38,7 +45,7 @@ import { getInterfaceListApi, PermissionApi } from '@/service';
 import { usePageConent, checkStatusAction } from '@/hooks';
 import { columns, form as defaultForm, model as defaultModel } from './config';
 
-const form = ref(defaultForm({})); // 搜索表单配置
+const form = ref(defaultForm()); // 搜索表单配置
 const modeFormlConfig = ref(defaultModel({ typeSelectChange: handleFormTypeSelectChange })); // 编辑弹框表单配置
 const defaultFormVal = ref<any>({}); // 新增/编辑表单 默认值
 const selectRows = ref<(number | string)[]>(); // 勾选中的行
@@ -66,8 +73,8 @@ const handleDialogCreate = async (values: any) => {
 
 // 编辑按钮
 const handleEdit = (row: any) => {
-  const categoryIds = row.categories?.map((item: any) => item.id) ?? [];
-  defaultFormVal.value = { ...row, categoryIds };
+  formatPermissionType(row.type as number);
+  defaultFormVal.value = row;
   (pageDialogRef.value as any).dialogVisible = true;
 };
 
@@ -82,12 +89,18 @@ const handleDelete = async (row: { id: number | string }) => {
 };
 
 /**
- * 权限类型选择
- * 不同类型需要填写的内容不一致
+ * 类型选择的事件
  */
 function handleFormTypeSelectChange(type: number) {
   console.log('type', type);
+  formatPermissionType(type);
+}
 
+/**
+ * 权限类型选择
+ * 不同类型需要填写的内容不一致
+ */
+const formatPermissionType = (type: number) => {
   /**
    * 隐藏指定的 fromItem
    * @param { [string] } hiddenList 需要隐藏的 formItem prop 名称
@@ -112,5 +125,5 @@ function handleFormTypeSelectChange(type: number) {
     case 2:
       return _hiddenFormItem([]);
   }
-}
+};
 </script>

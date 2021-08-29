@@ -48,21 +48,30 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, defineExpose, defineEmits, onMounted, ref, reactive, watch } from 'vue';
+import { defineProps, defineExpose, withDefaults, defineEmits, onMounted, ref, reactive, watch } from 'vue';
 import { getListApi } from '@/service';
 import { Table, Form } from '@/components/context';
 
-const props = defineProps<{
-  title: string;
-  url: string;
-  columns: any[];
-  form: { search: any[] };
-  showSelection?: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    title: string;
+    url: string;
+    columns: any[];
+    form: { search: any[] };
+    showSelection?: boolean;
+    pageInfo?: { page: number; pageSize: 10 | 20 | 50 | 100 };
+  }>(),
+  {
+    pageInfo: () => ({
+      page: 1,
+      pageSize: 10,
+    }),
+  },
+);
 
 const emit = defineEmits(['onSelect']);
 
-const search = ref<{ page: number; pageSize: number; [name: string]: string | number }>({ page: 1, pageSize: 10 }); // 搜索
+const search = ref<{ page: number; pageSize: number; [name: string]: string | number }>(props.pageInfo); // 搜索
 const tableData = reactive<{ list: any[]; total: number }>({ list: [], total: 0 }); // 展示数据
 
 onMounted(() => getList());
@@ -84,6 +93,8 @@ const handleSearch = (values: any) => changeSearch(values);
 const handleReset = (values: any) => changeSearch(values);
 
 const changeSearch = (values: any) => {
+  console.log('values', values);
+
   for (const key in values) {
     search.value[key] = values[key];
   }
