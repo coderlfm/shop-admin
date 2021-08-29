@@ -10,7 +10,7 @@ export const columns = [
   { label: '状态', key: 'status', slotName: 'status' },
   { label: '创建时间', key: 'createdAt', slotName: 'createdAt' },
   { label: '更新时间', key: 'updatedAt', slotName: 'updatedAt' },
-  { label: '操作', key: '', slotName: 'handle' },
+  { label: '操作', key: '', slotName: 'handle', width: '250' },
 ];
 
 export const form = () => ({

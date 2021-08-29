@@ -28,7 +28,7 @@ const props = withDefaults(
       okText?: '新增' | '保存';
       cancelText?: string;
     };
-    defaultFormVal: any;
+    defaultFormVal?: any;
   }>(),
   {
     title: '提示',

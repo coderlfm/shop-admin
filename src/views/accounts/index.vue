@@ -20,6 +20,7 @@
 
       <template #handle="scope">
         <template v-if="scope.row.role?.isAdmin !== '1'">
+          <el-button icon="el-icon-refresh-left" type="text" @click="hadleResetPassword(scope.row)">重置密码</el-button>
           <el-button icon="el-icon-edit" type="text" @click="handleEdit(scope.row)">编辑</el-button>
           <el-button icon="el-icon-delete" type="text" @click="handleDelete(scope.row)">删除</el-button>
         </template>
@@ -44,9 +45,9 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
-import { getRoleListAPI, AccountApi } from '@/service';
+import { getRoleListAPI, AccountApi, resetPasswordApi } from '@/service';
 import { checkStatusAction, usePageConent } from '@/hooks';
 import { sha1 } from '@/utils';
 import { SALT, ACCOUNT_DEFAULT_PASSWORD } from '@/constant';
@@ -116,6 +117,18 @@ const checkStatus = async (title: string, status: '0' | '1') => {
     status,
   };
   await checkStatusAction({ url: 'account/handle', title, data });
+  (pageContentRef.value as any).getList();
+};
+
+// 重置密码
+const hadleResetPassword = async ({ account, id }: { account: string; id: number }) => {
+  await ElMessageBox.confirm(`是否将账号 "${account}" 的登录密码重置为 "${ACCOUNT_DEFAULT_PASSWORD}" ?`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  });
+  await resetPasswordApi(id, { password: sha1(SALT + ACCOUNT_DEFAULT_PASSWORD) });
+  ElMessage.success('重置成功');
   (pageContentRef.value as any).getList();
 };
 </script>
