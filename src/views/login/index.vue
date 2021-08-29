@@ -23,6 +23,8 @@ import router from '@/router';
 import { setupStore } from '@/store';
 import { loginApi } from '@/service';
 import { ILoginData } from '@/service/type';
+import { sha1 } from '@/utils';
+import { SALT } from '@/constant';
 
 const formRef = ref<InstanceType<typeof ElForm>>();
 const formValues = ref<ILoginData>({
@@ -35,20 +37,22 @@ const rules = {
   password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
 };
 
-const handleLoign = () => {
-  console.log(formRef.value);
-  formRef.value?.validate(async (valid) => {
-    if (valid) {
-      const { code, data, msg } = await loginApi(formValues.value);
-      if (code) return ElMessage.warning(msg ?? '请求超时');
-      ElMessage.success('登录成功');
-      localStorage.setItem('token', data.token);
-      await setupStore();
-      router.push('/');
-    } else {
-      return false;
-    }
-  });
+const handleLoign = async () => {
+  // console.log(formRef.value);
+
+  const valid = await formRef.value?.validate();
+  if (!valid) return ElMessage.warning('请输入完整后再进行提交');
+
+  // 加密后再进行登录
+  const password = sha1(SALT + formValues.value.password);
+
+  const { code, data, msg } = await loginApi({ ...formValues.value, password });
+  if (code) return ElMessage.warning(msg ?? '请求超时');
+
+  ElMessage.success('登录成功');
+  localStorage.setItem('token', data.token);
+  await setupStore();
+  router.push('/');
 };
 </script>
 

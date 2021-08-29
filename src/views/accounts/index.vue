@@ -62,7 +62,7 @@ const handleCreate = async () => {
 
 // 新增 提交
 const handleDialogCreate = async (values: any) => {
-  // 默认密码
+  // 默认密码 123456
   values.password = sha1(SALT + ACCOUNT_DEFAULT_PASSWORD);
   await pageContentCreate(values);
 };
