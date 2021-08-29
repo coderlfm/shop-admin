@@ -6,7 +6,6 @@
       :url="url"
       :columns="columns"
       :form="form"
-      showSelection
       @onSelect="handleSelect"
     >
       <template #categories="scope">
@@ -104,7 +103,6 @@ const handleDelete = async (row: { id: number | string }) => {
 };
 
 const handleSelect = (select: any, row: any) => {
-  console.log('select', select, row);
   selectRows.value = select;
 };
 

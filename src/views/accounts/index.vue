@@ -1,9 +1,21 @@
 <template>
   <div class="product">
-    <PageContent ref="pageContentRef" :title="title" :url="url" :columns="columns" :form="form">
+    <PageContent
+      ref="pageContentRef"
+      :title="title"
+      :url="url"
+      :columns="columns"
+      :form="form"
+      @onSelect="handleSelect"
+    >
       <template #role="scope">
-        <el-tag v-if="scope.row.role?.isAdmin === '1'" type="info">{{ scope.row.role?.title }}</el-tag>
-        <el-tag v-else>{{ scope.row.role?.title }}</el-tag>
+        <el-tag v-if="scope.row.role?.isAdmin === '1'" type="info" size="small">{{ scope.row.role?.title }}</el-tag>
+        <el-tag v-else size="small">{{ scope.row.role?.title }}</el-tag>
+      </template>
+
+      <template #status="scope">
+        <el-tag v-if="scope.row.status === '1'" size="small" effect="dark"> 正常 </el-tag>
+        <el-tag v-else type="warning" size="small" effect="dark"> 冻结 </el-tag>
       </template>
 
       <template #handle="scope">
@@ -14,6 +26,8 @@
       </template>
 
       <template v-slot:tools>
+        <el-button type="primary" @click="handleFreeze">冻结</el-button>
+        <el-button type="primary" @click="handleUnFreeze">解冻</el-button>
         <el-button type="primary" @click="handleCreate">新增{{ title }}</el-button>
       </template>
     </PageContent>
@@ -30,9 +44,10 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
+import { ElMessage } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
 import { getRoleListAPI, AccountApi } from '@/service';
-import { usePageConent } from '@/hooks';
+import { checkStatusAction, usePageConent } from '@/hooks';
 import { sha1 } from '@/utils';
 import { SALT, ACCOUNT_DEFAULT_PASSWORD } from '@/constant';
 import { columns, form as defaultForm, model as defaultModel } from './config';
@@ -82,5 +97,25 @@ const handleDialogEdit = async (values: any) => {
 // 删除 提交
 const handleDelete = async (row: { id: number | string }) => {
   await pageContentDelete(row.id);
+};
+
+const handleSelect = (select: any, row: any) => {
+  selectRows.value = select;
+};
+
+// 冻结
+const handleFreeze = async () => checkStatus('冻结所选账号', '0');
+
+// 解冻
+const handleUnFreeze = () => checkStatus('解冻所选账号', '1');
+
+const checkStatus = async (title: string, status: '0' | '1') => {
+  if (!selectRows.value?.length) return ElMessage.warning('请先勾选需要操作的数据');
+  const data = {
+    accountIds: selectRows.value?.map((item: any) => item.id),
+    status,
+  };
+  await checkStatusAction({ url: 'account/handle', title, data });
+  (pageContentRef.value as any).getList();
 };
 </script>

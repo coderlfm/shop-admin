@@ -19,7 +19,6 @@
       <Table
         :tableData="tableData.list"
         :columns="columns"
-        :showSelection="showSelection"
         :pageInfo="{ page: search.page, pageSize: search.pageSize, total: tableData.total }"
         @onPageChange="handleCurrentChange"
         @onPageSizeChange="handleSizeChange"
@@ -58,7 +57,6 @@ const props = withDefaults(
     url: string;
     columns: any[];
     form: { search: any[] };
-    showSelection?: boolean;
     pageInfo?: { page: number; pageSize: 10 | 20 | 50 | 100 };
   }>(),
   {

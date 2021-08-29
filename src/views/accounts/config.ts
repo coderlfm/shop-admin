@@ -1,11 +1,13 @@
 import type { Option } from '@/types';
 
 export const columns = [
+  { type: 'selection', align: 'center', width: '60' },
   { label: 'id', key: 'id' },
   { label: '账号', key: 'account' },
   { label: '使用人', key: 'name' },
   { label: '账号备注', key: 'remark' },
   { label: '所属角色', key: 'role', slotName: 'role' },
+  { label: '状态', key: 'status', slotName: 'status' },
   { label: '创建时间', key: 'createdAt', slotName: 'createdAt' },
   { label: '更新时间', key: 'updatedAt', slotName: 'updatedAt' },
   { label: '操作', key: '', slotName: 'handle' },

@@ -1,10 +1,9 @@
 <template>
-  <el-table :data="tableData" v-bind="tableConfig" row-key="id" @select="handleSelect">
-    <!-- 多选框 -->
-    <el-table-column v-if="showSelection" type="selection" align="center" width="60" />
-
+  <el-table :data="tableData" row-key="id" v-bind="tableConfig" @select="handleSelect">
     <template v-for="item in columns" :key="item.key">
-      <el-table-column v-bind="item">
+      <!-- 多选框 -->
+      <el-table-column v-if="item.type === 'selection'" type="selection" reserve-selection v-bind="item" />
+      <el-table-column v-else v-bind="item">
         <template #default="scope">
           <slot :name="item.slotName" :row="scope.row">
             {{ scope.row[item.key] }}
@@ -30,7 +29,6 @@
 <script lang="ts" setup>
 import { defineProps, defineEmits } from 'vue';
 defineProps<{
-  showSelection?: boolean;
   tableConfig?: any;
   tableData: any[];
   columns: any[];
