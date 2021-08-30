@@ -3,6 +3,7 @@ import { IDataType } from '../type';
 
 export enum ProductsApi {
   product = 'product',
+  handle = 'product/handle',
 }
 
 // 删除商品

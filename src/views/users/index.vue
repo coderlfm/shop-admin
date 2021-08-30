@@ -1,5 +1,5 @@
 <template>
-  <div class="product">
+  <div class="users">
     <PageContent
       ref="pageContentRef"
       :title="title"
@@ -8,9 +8,18 @@
       :form="form"
       @onSelect="handleSelect"
     >
-      <template #role="scope">
-        <el-tag v-if="scope.row.role?.isAdmin === '1'" type="info" size="small">{{ scope.row.role?.title }}</el-tag>
-        <el-tag v-else size="small">{{ scope.row.role?.title }}</el-tag>
+      <template #expand="scope">
+        <div class="expand-user flex mb-7 items-center" v-for="item in scope.row.addresss" :key="item.id">
+          <div>收件人姓名: {{ item.name }}</div>
+          <div>收件人手机号: {{ item.mobile }}</div>
+          <div>收件人地址: {{ item.address }}</div>
+          <div>
+            <el-tag v-if="item.isDefault === '1'" size="small">默认地址</el-tag>
+          </div>
+        </div>
+      </template>
+      <template #avatar="scope">
+        <img :src="scope.row.avatar" />
       </template>
 
       <template #status="scope">
@@ -20,7 +29,6 @@
 
       <template #handle="scope">
         <template v-if="scope.row.role?.isAdmin !== '1'">
-          <el-button icon="el-icon-refresh-left" type="text" @click="hadleResetPassword(scope.row)">重置密码</el-button>
           <el-button icon="el-icon-edit" type="text" @click="handleEdit(scope.row)">编辑</el-button>
           <el-button icon="el-icon-delete" type="text" @click="handleDelete(scope.row)">删除</el-button>
         </template>
@@ -29,7 +37,6 @@
       <template v-slot:tools>
         <el-button type="primary" @click="handleFreeze">冻结</el-button>
         <el-button type="primary" @click="handleUnFreeze">解冻</el-button>
-        <el-button type="primary" @click="handleCreate">新增{{ title }}</el-button>
       </template>
     </PageContent>
 
@@ -38,55 +45,32 @@
       :title="title"
       :defaultFormVal="defaultFormVal"
       v-bind="modeFormlConfig"
-      @onCreate="handleDialogCreate"
       @onEdit="handleDialogEdit"
     />
   </div>
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
-import { getRoleListAPI, AccountApi, resetPasswordApi } from '@/service';
+import { UserApi } from '@/service';
 import { checkStatusAction, usePageConent } from '@/hooks';
 import { sha1 } from '@/utils';
 import { SALT, ACCOUNT_DEFAULT_PASSWORD } from '@/constant';
 import { columns, form as defaultForm, model as defaultModel } from './config';
 
 const form = ref(defaultForm()); // 搜索表单配置
-const modeFormlConfig = ref(defaultModel({})); // 编辑弹框表单配置
+const modeFormlConfig = ref(defaultModel()); // 编辑弹框表单配置
 const defaultFormVal = ref<any>({}); // 新增/编辑表单 默认值
 const selectRows = ref<(number | string)[]>(); // 勾选中的行
 
-const url = AccountApi.list;
-const title = '账号';
+const url = UserApi.list;
+const title = '用户';
 const { pageContentRef, pageDialogRef, pageContentCreate, pageContentEdit, pageContentDelete } = usePageConent({ url });
-
-onMounted(async () => {
-  // 获取权限列表
-  const { data } = await getRoleListAPI({ page: 1, pageSize: 1000 });
-  modeFormlConfig.value = defaultModel({
-    roleOptions: data.list.map((item: any) => ({ label: item.title, value: item.id })),
-  });
-});
-
-// 新增按钮
-const handleCreate = async () => {
-  defaultFormVal.value = {};
-  (pageDialogRef.value as any).dialogVisible = true;
-};
-
-// 新增 提交
-const handleDialogCreate = async (values: any) => {
-  // 默认密码 123456
-  values.password = sha1(SALT + ACCOUNT_DEFAULT_PASSWORD);
-  await pageContentCreate(values);
-};
 
 // 编辑按钮
 const handleEdit = (row: any) => {
-  const roleId = row.role.id;
-  defaultFormVal.value = { ...row, roleId };
+  defaultFormVal.value = row;
   (pageDialogRef.value as any).dialogVisible = true;
 };
 
@@ -113,22 +97,23 @@ const handleUnFreeze = () => checkStatus('解冻所选账号', '1');
 const checkStatus = async (title: string, status: '0' | '1') => {
   if (!selectRows.value?.length) return ElMessage.warning('请先勾选需要操作的数据');
   const data = {
-    accountIds: selectRows.value?.map((item: any) => item.id),
+    userIds: selectRows.value?.map((item: any) => item.id),
     status,
   };
-  await checkStatusAction({ url: AccountApi.handle, title, data });
-  (pageContentRef.value as any).getList();
-};
-
-// 重置密码
-const hadleResetPassword = async ({ account, id }: { account: string; id: number }) => {
-  await ElMessageBox.confirm(`是否将账号 "${account}" 的登录密码重置为 "${ACCOUNT_DEFAULT_PASSWORD}" ?`, '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  });
-  await resetPasswordApi(id, { password: sha1(SALT + ACCOUNT_DEFAULT_PASSWORD) });
-  ElMessage.success('重置成功');
+  await checkStatusAction({ url: UserApi.handle, title, data });
   (pageContentRef.value as any).getList();
 };
 </script>
+
+<style lang="less" scoped>
+.users {
+  img {
+    width: 50px;
+  }
+  .expand-user {
+    > * {
+      margin-right: 100px;
+    }
+  }
+}
+</style>

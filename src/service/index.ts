@@ -8,5 +8,6 @@ export * from './orders';
 export * from './permission';
 export * from './roles';
 export * from './accounts';
+export * from './users';
 
 export { Request };

@@ -118,7 +118,7 @@ const checkStatus = async (title: string, status: '0' | '1') => {
     productIds: selectRows.value?.map((item: any) => item.id),
     status,
   };
-  await checkStatusAction({ url: 'product/handle', title, data });
+  await checkStatusAction({ url: ProductsApi.handle, title, data });
   (pageContentRef.value as any).getList();
 };
 </script>

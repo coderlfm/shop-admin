@@ -4,6 +4,7 @@ import { IDataType } from '../type';
 export enum AccountApi {
   list = 'account',
   resetPassword = 'account/resetPassword',
+  handle = 'account/handle',
 }
 
 // 获取所有角色列表
