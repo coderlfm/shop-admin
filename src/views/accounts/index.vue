@@ -20,9 +20,9 @@
 
       <template #handle="scope">
         <template v-if="scope.row.role?.isAdmin !== '1'">
-          <el-button icon="el-icon-refresh-left" type="text" @click="hadleResetPassword(scope.row)">重置密码</el-button>
-          <el-button icon="el-icon-edit" type="text" @click="handleEdit(scope.row)">编辑</el-button>
-          <el-button icon="el-icon-delete" type="text" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button icon="ri-lock-unlock-line" type="text" @click="hadleResetPassword(scope.row)">重置密码</el-button>
+          <el-button icon="ri-edit-2-line" type="text" @click="handleEdit(scope.row)">编辑</el-button>
+          <el-button icon="ri-delete-bin-6-line" type="text" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </template>
 

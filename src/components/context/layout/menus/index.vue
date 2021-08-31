@@ -12,16 +12,20 @@
 
         <el-submenu :index="item.path" v-if="item.children" >
           <template #title>
-            <i :class="item.icon"></i>
-            <span > {{ item.title }} </span>
+            <div>
+              <i :class="['text-base mr-2',item.icon]"></i>
+              <span > {{ item.title }} </span>
+            </div>
           </template>
           <!-- 暂时只支持2级菜单 -->
           <el-menu-item :index="cItem.path" v-for="cItem in item.children" :key="cItem.path" @click="handleMenuItemClick(cItem.path)"> {{ cItem.title }} </el-menu-item>
         </el-submenu>
 
         <el-menu-item :index="item.path" v-else @click="handleMenuItemClick(item.path)">
-          <i :class="item.icon"></i>
-          <template #title> {{ item.title }} </template>
+          <div>
+            <i :class="['text-base mr-2',item.icon]"></i>
+            <span > {{ item.title }} </span>
+          </div>
         </el-menu-item>
 
       </template>
@@ -66,6 +70,10 @@ const handleMenuItemClick = (path:string) => {
 
 .is-active{
   background: #1890ff linear-gradient(315deg, #35fcff 0%, #0443fc 100%)!important;
+}
+[class^='ri-'],
+[class*=' ri-'] {
+  vertical-align: inherit;
 }
 
 </style>

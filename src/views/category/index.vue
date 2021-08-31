@@ -2,8 +2,8 @@
   <div class="category">
     <PageContent ref="pageContentRef" :title="title" :url="url" :columns="columns" :form="form">
       <template #handle="scope">
-        <el-button icon="el-icon-edit" type="text" @click="handleEdit(scope.row)">编辑</el-button>
-        <el-button icon="el-icon-delete" type="text" @click="handleDelete(scope.row)">删除</el-button>
+        <el-button icon="ri-edit-2-line" type="text" @click="handleEdit(scope.row)">编辑</el-button>
+        <el-button icon="ri-delete-bin-6-line" type="text" @click="handleDelete(scope.row)">删除</el-button>
       </template>
 
       <template v-slot:tools>

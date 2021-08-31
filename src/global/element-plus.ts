@@ -25,6 +25,9 @@ import {
   ElDialog,
   ElTag,
   ElCascader,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
 } from 'element-plus';
 import 'element-plus/lib/theme-chalk/base.css';
 
@@ -54,6 +57,9 @@ const components = [
   ElDialog,
   ElTag,
   ElCascader,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
 ];
 
 export default function (app: App) {

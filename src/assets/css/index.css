@@ -17,3 +17,12 @@ body,
 #app > div {
   min-height: 100%;
 }
+
+[class^='ri-'],
+[class*=' ri-'] {
+  vertical-align: bottom;
+}
+
+.el-button i {
+  margin-right: 2px;
+}

@@ -6,8 +6,8 @@
       </template>
 
       <template #handle="scope">
-        <el-button icon="el-icon-edit" type="text" @click="handleEdit(scope.row)">编辑</el-button>
-        <el-button icon="el-icon-delete" type="text" @click="handleDelete(scope.row)">删除</el-button>
+        <el-button icon="ri-edit-2-line" type="text" @click="handleEdit(scope.row)">编辑</el-button>
+        <el-button icon="ri-delete-bin-6-line" type="text" @click="handleDelete(scope.row)">删除</el-button>
       </template>
 
       <template v-slot:tools>
@@ -45,7 +45,11 @@ onMounted(async () => {
   // 获取权限列表
   const { data } = await getPermissionListAPI({ page: 1, pageSize: 1000 });
   modeFormlConfig.value = defaultModel({
-    permissionOptions: data.list.map((item: any) => ({ label: item.title, value: item.id })),
+    permissionOptions: data.list.map((item: any) => {
+      const label = item.type === 0 ? `/ 操作权限` : `/ ${item.type} 级菜单`;
+
+      return { label: item.title + label, value: item.id };
+    }),
   });
 });
 
