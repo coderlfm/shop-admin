@@ -1,5 +1,7 @@
 <template lang="">
-  <div class="w-full flex justify-end">
+  <div class="w-full flex justify-between">
+    <slot></slot>
+
     <el-dropdown>
       <span class="el-dropdown-link">
         <i class="ri-user-3-line text-xl hover:text-blue-500"></i>

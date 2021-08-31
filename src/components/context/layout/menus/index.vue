@@ -5,6 +5,7 @@
       class="el-menu-vertical"
       @open="handleOpen"
       @close="handleClose"
+      :collapse="isCollapse"
       background-color="#213262"
       text-color="#fff"
       active-text-color="#fff">
@@ -33,9 +34,14 @@
     </el-menu>
 </template>
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed,defineProps } from 'vue';
 import { useStore } from 'vuex'
 import router from '@/router';
+
+
+defineProps<{
+  isCollapse: boolean
+}>()
 
 const store = useStore();
 
@@ -66,6 +72,11 @@ const handleMenuItemClick = (path:string) => {
 }
 .el-menu-vertical{
   border: none;
+  width: 200px;
+}
+
+.el-menu--collapse{
+  width:auto!important;
 }
 
 .is-active{

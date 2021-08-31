@@ -1,11 +1,17 @@
 <template>
   <div class="main">
     <el-container class="main-content">
-      <el-aside :width="isCollapse ? '60px' : '210px'">
-        <Menus />
+      <el-aside>
+        <Menus v-model:isCollapse="isCollapse" />
       </el-aside>
       <el-container class="page">
-        <el-header class="page-header"><NavBar /></el-header>
+        <el-header class="page-header">
+          <NavBar>
+            <div class="text-xl cursor-pointer hover:text-blue-500" @click="isCollapse = !isCollapse">
+              <i :class="isCollapse ? 'ri-indent-increase' : 'ri-indent-decrease'"></i>
+            </div>
+          </NavBar>
+        </el-header>
         <el-main class="page-content">
           <div class="page-info">
             <router-view></router-view>
@@ -22,9 +28,6 @@ import Menus from './menus/index.vue';
 import NavBar from './nav-bar/index.vue';
 
 const isCollapse = ref(false);
-const handleFoldChange = (isFold: boolean) => {
-  isCollapse.value = isFold;
-};
 </script>
 
 <style scoped lang="less">
@@ -63,6 +66,7 @@ const handleFoldChange = (isFold: boolean) => {
 }
 
 .el-aside {
+  width: auto;
   overflow-x: hidden;
   overflow-y: auto;
   line-height: 200px;
