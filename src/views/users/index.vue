@@ -55,8 +55,6 @@ import { ElMessage } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
 import { UserApi } from '@/service';
 import { checkStatusAction, usePageConent } from '@/hooks';
-import { sha1 } from '@/utils';
-import { SALT, ACCOUNT_DEFAULT_PASSWORD } from '@/constant';
 import { columns, form as defaultForm, model as defaultModel } from './config';
 
 const form = ref(defaultForm()); // 搜索表单配置

@@ -23,8 +23,7 @@ import router from '@/router';
 import { setupStore } from '@/store';
 import { loginApi } from '@/service';
 import { ILoginData } from '@/service/type';
-import { sha1 } from '@/utils';
-import { SALT } from '@/constant';
+import { cryptoPassword } from '@/utils';
 
 const formRef = ref<InstanceType<typeof ElForm>>();
 const formValues = ref<ILoginData>({
@@ -44,15 +43,15 @@ const handleLoign = async () => {
   if (!valid) return ElMessage.warning('请输入完整后再进行提交');
 
   // 加密后再进行登录
-  const password = sha1(SALT + formValues.value.password);
+  const password = cryptoPassword(formValues.value.password);
 
   const { code, data, msg } = await loginApi({ ...formValues.value, password });
   if (code) return ElMessage.warning(msg ?? '请求超时');
 
-  ElMessage.success('登录成功');
   localStorage.setItem('token', data.token);
+  ElMessage.success('登录成功');
   await setupStore();
-  router.push('/');
+  router.push('/products');
 };
 </script>
 

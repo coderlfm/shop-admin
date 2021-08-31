@@ -42,7 +42,7 @@ const props = withDefaults(
 const emit = defineEmits(['onCreate', 'onEdit', 'update:defaultFormVal']);
 
 const dialogVisible = ref(false); // 弹出框
-const formRef = ref<InstanceType<typeof Form>>(); // 弹出框
+const formRef = ref<InstanceType<typeof Form>>(); // 表单 ref
 const config = ref(props.config); // 底部配置
 
 // 默认值发生变化，点击编辑按钮时触发

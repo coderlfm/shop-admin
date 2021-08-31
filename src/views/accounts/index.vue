@@ -49,8 +49,8 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
 import { getRoleListAPI, AccountApi, resetPasswordApi } from '@/service';
 import { checkStatusAction, usePageConent } from '@/hooks';
-import { sha1 } from '@/utils';
-import { SALT, ACCOUNT_DEFAULT_PASSWORD } from '@/constant';
+import { cryptoPassword } from '@/utils';
+import { ACCOUNT_DEFAULT_PASSWORD } from '@/constant';
 import { columns, form as defaultForm, model as defaultModel } from './config';
 
 const form = ref(defaultForm()); // 搜索表单配置
@@ -79,7 +79,7 @@ const handleCreate = async () => {
 // 新增 提交
 const handleDialogCreate = async (values: any) => {
   // 默认密码 123456
-  values.password = sha1(SALT + ACCOUNT_DEFAULT_PASSWORD);
+  values.password = cryptoPassword(ACCOUNT_DEFAULT_PASSWORD);
   await pageContentCreate(values);
 };
 
@@ -127,7 +127,7 @@ const hadleResetPassword = async ({ account, id }: { account: string; id: number
     cancelButtonText: '取消',
     type: 'warning',
   });
-  await resetPasswordApi(id, { password: sha1(SALT + ACCOUNT_DEFAULT_PASSWORD) });
+  await resetPasswordApi(id, { password: cryptoPassword(ACCOUNT_DEFAULT_PASSWORD) });
   ElMessage.success('重置成功');
   (pageContentRef.value as any).getList();
 };

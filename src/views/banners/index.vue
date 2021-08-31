@@ -54,8 +54,6 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
 import { BannerApi } from '@/service';
 import { checkStatusAction, usePageConent } from '@/hooks';
-import { sha1 } from '@/utils';
-import { SALT, ACCOUNT_DEFAULT_PASSWORD } from '@/constant';
 import { columns, form as defaultForm, model as defaultModel } from './config';
 
 const form = ref(defaultForm()); // 搜索表单配置
@@ -75,8 +73,6 @@ const handleCreate = async () => {
 
 // 新增 提交
 const handleDialogCreate = async (values: any) => {
-  // 默认密码 123456
-  values.password = sha1(SALT + ACCOUNT_DEFAULT_PASSWORD);
   await pageContentCreate(values);
 };
 

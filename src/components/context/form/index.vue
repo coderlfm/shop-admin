@@ -124,6 +124,7 @@ const resetFormFidlds = () => {
 
 defineExpose({
   resetFormFidlds,
+  formData,
 });
 </script>
 <style lang="less" scoped>
