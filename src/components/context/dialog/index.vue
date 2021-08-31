@@ -39,7 +39,7 @@ const props = withDefaults(
   },
 );
 
-const emit = defineEmits(['onCreate', 'onEdit']);
+const emit = defineEmits(['onCreate', 'onEdit', 'update:defaultFormVal']);
 
 const dialogVisible = ref(false); // 弹出框
 const formRef = ref<InstanceType<typeof Form>>(); // 弹出框
@@ -60,7 +60,10 @@ watch(
 
 // 关闭 dialog 时清空表单
 watch(dialogVisible, (newVal) => {
-  if (newVal === false) (formRef.value as any).resetFormFidlds();
+  if (newVal === false) {
+    (formRef.value as any).resetFormFidlds();
+    emit('update:defaultFormVal', {});
+  }
 });
 
 // 新增/编辑

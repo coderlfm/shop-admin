@@ -9,5 +9,6 @@ export * from './permission';
 export * from './roles';
 export * from './accounts';
 export * from './users';
+export * from './banners';
 
 export { Request };
