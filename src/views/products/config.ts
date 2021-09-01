@@ -34,7 +34,7 @@ export const model = ({ categoryOptions = [] }: { categoryOptions?: Option[] }) 
       marketPrice: [{ required: true, message: '该项为必填', trigger: 'change' }],
       discountPrice: [{ required: true, message: '该项为必填', trigger: 'change' }],
       sum: [{ required: true, message: '该项为必填', trigger: 'change' }],
-      coverUrl: [{ required: true, message: '该项为必填', trigger: 'change' }],
+      // coverUrl: [{ required: true, message: '该项为必填', trigger: 'change' }],
     },
   },
   formList: [
@@ -46,6 +46,6 @@ export const model = ({ categoryOptions = [] }: { categoryOptions?: Option[] }) 
     { wrap: { label: '商品原价', prop: 'marketPrice' }, props: { placeholder: '请输入商品原价' } },
     { wrap: { label: '商品优惠价', prop: 'discountPrice' }, props: { placeholder: '请输入商品优惠价' } },
     { wrap: { label: '商品库存', prop: 'sum' }, props: { placeholder: '请输入商品库存' } },
-    { wrap: { label: '商品图片', prop: 'coverUrl' }, props: { placeholder: '请输入商品图片' } },
+    { wrap: { label: '商品主图', prop: 'coverUrl' }, props: { placeholder: '请上传商品主图' }, slotName: 'coverUrl' },
   ],
 });

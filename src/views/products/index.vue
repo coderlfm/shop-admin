@@ -29,7 +29,7 @@
         <el-button icon="ri-delete-bin-6-line" type="text" @click="handleDelete(scope.row)">删除</el-button>
       </template>
 
-      <template v-slot:tools>
+      <template #tools>
         <el-button type="primary" @click="handleUnFreeze">上架</el-button>
         <el-button type="primary" @click="handleFreeze">下架</el-button>
         <el-button type="primary" @click="handleCreate">新增商品</el-button>
@@ -43,14 +43,30 @@
       v-bind="modeFormlConfig"
       @onCreate="handleDialogCreate"
       @onEdit="handleDialogEdit"
-    />
+    >
+      <template #coverUrl>
+        <el-upload
+          class="product-uploader"
+          name="product"
+          :headers="uploadHeader"
+          :action="BASE_URL + UploadApi.product"
+          :show-file-list="false"
+          :on-success="handleUploadProductSuccess"
+        >
+          <img v-if="uploadProduct" :src="uploadProduct" class="banner" />
+          <div v-else class="py-24 w-full">
+            <i class="ri-image-add-fill text-2xl"></i>
+          </div>
+        </el-upload>
+      </template>
+    </Dialog>
   </div>
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
-import { getCateogriesListAPI, ProductsApi } from '@/service';
+import { BASE_URL, getCateogriesListAPI, ProductsApi, UploadApi, uploadHeader } from '@/service';
 import { usePageConent, checkStatusAction } from '@/hooks';
 import { columns, form as defaultForm, model as defaultModel } from './config';
 
@@ -58,10 +74,14 @@ const form = ref(defaultForm({})); // 搜索表单配置
 const modeFormlConfig = ref(defaultModel({})); // 编辑弹框表单配置
 const defaultFormVal = ref<any>({}); // 新增/编辑表单 默认值
 const selectRows = ref<(number | string)[]>(); // 勾选中的行
+const uploadProduct = ref(''); // 上传的图片
 
 const url = ProductsApi.product;
 const title = '商品';
-const { pageContentRef, pageDialogRef, pageContentCreate, pageContentEdit, pageContentDelete } = usePageConent({ url });
+const { pageContentRef, pageDialogRef, pageContentCreate, pageContentEdit, pageContentDelete } = usePageConent({
+  url,
+  perSubmit,
+});
 
 onMounted(async () => {
   const { data } = await getCateogriesListAPI({ page: 1, pageSize: 1000 });
@@ -87,6 +107,8 @@ const handleDialogCreate = async (values: any) => {
 
 // 编辑按钮
 const handleEdit = (row: any) => {
+  uploadProduct.value = row.coverUrl;
+
   const categoryIds = row.categories?.map((item: any) => item.id) ?? [];
   defaultFormVal.value = { ...row, categoryIds };
   (pageDialogRef.value as any).dialogVisible = true;
@@ -121,4 +143,30 @@ const checkStatus = async (title: string, status: '0' | '1') => {
   await checkStatusAction({ url: ProductsApi.handle, title, data });
   (pageContentRef.value as any).getList();
 };
+
+// 图片上传
+const handleUploadProductSuccess = (res: any, file: any) => {
+  const { data } = res;
+  uploadProduct.value = data.url;
+};
+
+// 请求前的回调
+function perSubmit(type: 'create' | 'update', data: any) {
+  if (!uploadProduct.value) {
+    ElMessage.warning('请先上传图片后再进行提交');
+    return;
+  }
+
+  data.url = uploadProduct.value;
+  return data;
+}
 </script>
+<style lang="less" scoped>
+.product {
+  .product-uploader {
+    /deep/ .el-upload--text {
+      width: 100%;
+    }
+  }
+}
+</style>

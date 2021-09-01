@@ -50,7 +50,7 @@
         <el-upload
           class="banner-uploader"
           name="banner"
-          :headers="headers"
+          :headers="uploadHeader"
           :action="BASE_URL + UploadApi.banner"
           :show-file-list="false"
           :on-success="handleUploadBannerSuccess"
@@ -68,7 +68,7 @@
 import { ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
-import { BannerApi, BASE_URL, UploadApi } from '@/service';
+import { BannerApi, BASE_URL, UploadApi, uploadHeader } from '@/service';
 import { checkStatusAction, usePageConent } from '@/hooks';
 import { columns, form as defaultForm, model as defaultModel } from './config';
 
@@ -134,8 +134,6 @@ const checkStatus = async (title: string, status: '0' | '1') => {
   await checkStatusAction({ url: BannerApi.handle, title, data });
   (pageContentRef.value as any).getList();
 };
-
-const headers = { Authorization: `Bearer ${localStorage.getItem('token')}` };
 
 // 图片上传
 const handleUploadBannerSuccess = (res: any, file: any) => {

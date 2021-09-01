@@ -19,7 +19,6 @@ export const model = () => ({
   formProps: {
     'label-width': 100,
     rules: {
-      // url: [{ required: true, message: '该项为必填', trigger: 'blur' }],
       productId: [{ required: true, message: '该项为必填', trigger: 'blur' }],
     },
   },
