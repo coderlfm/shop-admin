@@ -10,6 +10,7 @@ module.exports = {
     '@vue/typescript/recommended',
     '@vue/prettier',
     '@vue/prettier/@typescript-eslint',
+    'plugin:vue/vue3-recommended',
     'prettier',
   ],
   parserOptions: {
@@ -22,5 +23,12 @@ module.exports = {
     '@typescript-eslint/no-empty-function': 'warn',
     'vue/no-unused-vars': 'warn',
     '@typescript-eslint/no-explicit-any': 'off',
+    'vue/attribute-hyphenation': 'off',
+    'vue/no-unused-components': [
+      'error',
+      {
+        ignoreWhenBindingPresent: true,
+      },
+    ],
   },
 };

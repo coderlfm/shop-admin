@@ -1,4 +1,5 @@
-import { RouteRecordRaw } from 'vue-router';
+import { mainRouter } from '@/router';
+import { RouteRecordRaw, Router } from 'vue-router';
 interface IRouterItem {
   path: string;
   name: string;
@@ -24,4 +25,29 @@ export default function () {
     }
   });
   return routerArr;
+}
+
+/**
+ * 注册当前用户所拥有的路由
+ * @param routes 当前账户所拥有的路由
+ * @param allRoutes 所有的路由匹配表
+ * @param router 路由对象
+ */
+export function registerDynamicRoute(routes: any[], allRoutes: any[], router: Router) {
+
+  // 退出登录后需要重新添加路由
+  !router.hasRoute('main') && router.addRoute(mainRouter);
+
+  routes.forEach((item: any) => {
+    const route = allRoutes.find((route) => item.path === route.path);
+    if (route) {
+      router.addRoute('main', route);
+    }
+  });
+
+  router.addRoute('main', {
+    path: '/:pathMatch(.*)*',
+    name: 'notFound',
+    component: () => import('@/views/not-found/index.vue'),
+  });
 }

@@ -3,7 +3,15 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import Request from '@/service/request';
 import { PageContent, Dialog } from '@/components/context';
 
-export function usePageConent({ url, title = '' }: { url: string; title?: string }) {
+export function usePageConent({
+  url,
+  title = '',
+  perSubmit,
+}: {
+  url: string;
+  title?: string;
+  perSubmit?: (type: 'create' | 'update', data: any) => any;
+}) {
   const pageContentRef = ref<InstanceType<typeof PageContent>>();
   const pageDialogRef = ref<InstanceType<typeof Dialog>>();
 
@@ -22,11 +30,18 @@ export function usePageConent({ url, title = '' }: { url: string; title?: string
   }
 
   async function pageContentCreate(data: any) {
+    perSubmit && (data = perSubmit('create', data));
+    console.log('data', data);
+
+    if (!data) return;
     await Request.post({ url, data });
     _success();
   }
 
   async function pageContentEdit(id: string | number, data: any) {
+    perSubmit && (data = perSubmit('create', data));
+
+    if (!data) return;
     await Request.patch({ url: `${url}/${id}`, data });
     _success();
   }

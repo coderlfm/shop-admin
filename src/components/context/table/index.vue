@@ -15,13 +15,13 @@
 
   <div class="flex justify-end py-3 pr-3">
     <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="pageInfo.page"
+      :currentPage="pageInfo.page"
       :page-sizes="[10, 20, 50, 100]"
       :page-size="pageInfo.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
       :total="pageInfo.total"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
     >
     </el-pagination>
   </div>

@@ -1,13 +1,16 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import regitstrRouter from '@/utils/regitstrRouter';
+import regitstrRouter, { registerDynamicRoute } from '@/utils/regitstrRouter';
+
+export const mainRouter: RouteRecordRaw = {
+  path: '/',
+  name: 'main',
+  redirect: '/products',
+  component: () => import(/* webpackChunkName: "main" */ '../views/main/index.vue'),
+  children: [],
+};
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    name: 'main',
-    component: () => import(/* webpackChunkName: "main" */ '../views/main/index.vue'),
-    children: [],
-  },
+  mainRouter,
   {
     path: '/login',
     name: 'login',
@@ -30,12 +33,10 @@ router.beforeEach((to, from) => {
   if (to.path !== '/login' && !localStorage.getItem('token')) return '/login';
 });
 
-// 注册所有路由
-regitstrRouter().forEach((item) => router.addRoute('main', item));
+// 注册路由
+const currentAccountRouters = JSON.parse(localStorage.getItem('routes') as string) ?? []; // 当前账号所有的路由
+const allRouter = regitstrRouter(); // 所有路由
 
-router.addRoute('main', {
-  path: '/:pathMatch(.*)*',
-  name: 'notFound',
-  component: () => import('@/views/not-found/index.vue'),
-});
+registerDynamicRoute(currentAccountRouters, allRouter, router);
+
 export default router;

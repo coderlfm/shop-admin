@@ -1,10 +1,10 @@
 <template>
   <div>
-    <el-form :model="formData" ref="formRef" v-bind="formProps">
+    <el-form ref="formRef" :model="formData" v-bind="formProps">
       <el-row :gutter="20">
         <template v-for="item in formList" :key="item.wrap.prop">
-          <el-col v-bind="colConfig" v-if="!item.hidden">
-            <el-form-item v-bind="item.wrap">
+          <el-col v-if="!item.hidden" v-bind="colConfig">
+            <el-form-item v-if="!item.slotName" v-bind="item.wrap">
               <el-select
                 v-if="item.wrap.type === 'select'"
                 v-model="formData[item.wrap.prop]"
@@ -20,6 +20,7 @@
                 >
                 </el-option>
               </el-select>
+
               <el-cascader
                 v-else-if="item.wrap.type === 'cascader'"
                 v-model="formData[item.wrap.prop]"
@@ -27,6 +28,12 @@
               ></el-cascader>
 
               <el-input v-else v-model="formData[item.wrap.prop]" v-bind="item.props"></el-input>
+            </el-form-item>
+
+            <el-form-item v-else v-bind="item.wrap">
+              <template #default>
+                <slot :name="item.slotName" :row="formData[item.wrap.prop]"></slot>
+              </template>
             </el-form-item>
           </el-col>
         </template>
@@ -43,7 +50,6 @@
 <script lang="ts" setup>
 import { withDefaults, watch, defineEmits, defineProps, defineExpose, ref } from 'vue';
 import { ElForm, ElMessage } from 'element-plus';
-import FormType from 'element-plus/lib/el-form/src/form.vue';
 
 const props = withDefaults(
   defineProps<{
@@ -74,13 +80,15 @@ const props = withDefaults(
       okText: '搜索',
       cancelText: '重置',
     }),
+    defaultFormVal: null,
+    formProps: () => ({}),
   },
 );
 
 const emit = defineEmits(['onSubmit', 'onReset']);
 
 const setDefault = (type: 'create' | 'update' = 'create', souce?: any) => {
-  let formValue: { [name: string]: string | undefined } = {};
+  let formValue: { [name: string]: any } = {};
   props.formList.forEach((item: any) => {
     if (type === 'create') item.wrap.prop && (formValue[item.wrap.prop] = undefined);
     if (type === 'update') item.wrap.prop && (formValue[item.wrap.prop] = souce[item.wrap.prop]);

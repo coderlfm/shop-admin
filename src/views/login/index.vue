@@ -1,7 +1,7 @@
 <template>
   <div class="login-wrap flex flex-col justify-center items-center">
     <h3 class="font-bold text-xl text-center mb-5 -mt-20">商城管理后台</h3>
-    <section class="w-80 flex flex-col p-5 pt-10 border border-gray-300 rounded">
+    <section class="w-80 flex flex-col p-5 pt-10 border border-gray-200 rounded">
       <el-form ref="formRef" :model="formValues" :rules="rules">
         <el-form-item label="账号" prop="account">
           <el-input v-model="formValues.account"></el-input>
@@ -9,10 +9,10 @@
         <el-form-item label="密码" prop="password">
           <el-input v-model="formValues.password" type="password"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button class="w-full" type="primary" @click="handleLoign">立即登录</el-button>
-        </el-form-item>
       </el-form>
+    </section>
+    <section class="w-80 flex mt-5">
+      <el-button class="w-full" type="primary" @click="handleLoign">立即登录</el-button>
     </section>
   </div>
 </template>
@@ -51,7 +51,10 @@ const handleLoign = async () => {
   localStorage.setItem('token', data.token);
   ElMessage.success('登录成功');
   await setupStore();
+  console.log('3');
+
   router.push('/products');
+  setTimeout(() => {}, 0);
 };
 </script>
 

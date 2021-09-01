@@ -1,8 +1,8 @@
 <template lang="">
   <el-dialog
+    v-model="dialogVisible"
     custom-class="dialog-wrap"
     :title="(config.okText === '保存' ? '编辑' : '新增') + title"
-    v-model="dialogVisible"
   >
     <Form
       ref="formRef"
@@ -10,9 +10,14 @@
       :colConfig="{ lg: 24 }"
       :formProps="formProps"
       :defaultFormVal="defaultFormVal"
-      @onSubmit="handleSubmit"
       :config="config"
-    />
+      @onSubmit="handleSubmit"
+    >
+    <template v-for="item in formList" :key="item.wrap.prop" #[item.slotName]="scope" >
+      <slot v-if="item.slotName" :name=item.slotName :row="scope.row"> </slot>
+    </template>
+
+    </Form>
   </el-dialog>
 </template>
 <script lang="ts" setup>
@@ -36,6 +41,8 @@ const props = withDefaults(
       okText: '新增',
       cancelText: '重置',
     }),
+    defaultFormVal: null,
+    formProps:() => ({})
   },
 );
 

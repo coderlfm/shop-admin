@@ -43,7 +43,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import route from '@/router'
+import router from '@/router'
 import { Form } from '@/components/context';
 import { resetAccountPasswordApi } from '@/service'
 import { cryptoPassword } from '@/utils';
@@ -64,7 +64,8 @@ const handleSubmit = async (values: any) => {
 
 const hadleLogout = ( )=> {
   localStorage.clear();
-  route.push('/login')
+  router.removeRoute('main')
+  router.push('/login')
 }
 
 // 校验密码

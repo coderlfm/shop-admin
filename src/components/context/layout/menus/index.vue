@@ -1,7 +1,12 @@
 <template lang="">
-  <div class="logo"></div>
+  <div class="logo text-white text-2xl text-center">
+
+    <span v-if="!isCollapse">茶叶商城管理系统</span>
+    <div v-else class="p-3 flex justify-center"><img src="@/assets/images/logo.svg" /></div>
+
+  </div>
    <el-menu
-      default-active="/products"
+      :default-active="localtion.path"
       class="el-menu-vertical"
       @open="handleOpen"
       @close="handleClose"
@@ -34,8 +39,9 @@
     </el-menu>
 </template>
 <script lang="ts" setup>
-import { computed,defineProps } from 'vue';
+import { computed, defineProps,  } from 'vue';
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router';
 import router from '@/router';
 
 
@@ -44,6 +50,7 @@ defineProps<{
 }>()
 
 const store = useStore();
+const localtion = useRoute();
 
 const menus = computed(() => store.state.permission?.menus)
 
@@ -54,17 +61,17 @@ const handleClose = (key:any, keyPath:any) => {
   console.log(key, keyPath);
 };
 
-const handleMenuItemClick = (path:string) => {
-  console.log(path);
-  router.push(path)
-
-}
+const handleMenuItemClick = (path:string) => router.push(path)
 
 // console.log(router.getRoutes());
 </script>
 <style lang="less" scoped>
 .logo{
-  height: 48px;
+  height: 68px;
+  line-height: 68px;
+  img{
+    max-width: 40px;
+  }
 }
 
 .el-menu-item {
@@ -72,7 +79,8 @@ const handleMenuItemClick = (path:string) => {
 }
 .el-menu-vertical{
   border: none;
-  width: 200px;
+  width: 220px;
+  transition: .5s;
 }
 
 .el-menu--collapse{
@@ -85,6 +93,7 @@ const handleMenuItemClick = (path:string) => {
 [class^='ri-'],
 [class*=' ri-'] {
   vertical-align: inherit;
+  color: #eee;
 }
 
 </style>

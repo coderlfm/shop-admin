@@ -31,7 +31,7 @@
         </template>
       </template>
 
-      <template v-slot:tools>
+      <template #tools>
         <el-button type="primary" @click="handleFreeze">停用</el-button>
         <el-button type="primary" @click="handleUnFreeze">启用</el-button>
         <el-button type="primary" @click="handleCreate">新增{{ title }}</el-button>
@@ -40,19 +40,35 @@
 
     <Dialog
       ref="pageDialogRef"
-      :title="title"
       v-model:defaultFormVal="defaultFormVal"
+      :title="title"
       v-bind="modeFormlConfig"
       @onCreate="handleDialogCreate"
       @onEdit="handleDialogEdit"
-    />
+    >
+      <template #bannerUrl>
+        <el-upload
+          class="banner-uploader"
+          name="banner"
+          :headers="headers"
+          :action="BASE_URL + UploadApi.banner"
+          :show-file-list="false"
+          :on-success="handleUploadBannerSuccess"
+        >
+          <img v-if="uploadBanner" :src="uploadBanner" class="banner" />
+          <div v-else class="py-24 w-full">
+            <i class="ri-image-add-fill text-2xl"></i>
+          </div>
+        </el-upload>
+      </template>
+    </Dialog>
   </div>
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { PageContent, Dialog } from '@/components/context';
-import { BannerApi } from '@/service';
+import { BannerApi, BASE_URL, UploadApi } from '@/service';
 import { checkStatusAction, usePageConent } from '@/hooks';
 import { columns, form as defaultForm, model as defaultModel } from './config';
 
@@ -61,9 +77,14 @@ const modeFormlConfig = ref(defaultModel()); // 编辑弹框表单配置
 const defaultFormVal = ref<any>({}); // 新增/编辑表单 默认值
 const selectRows = ref<(number | string)[]>(); // 勾选中的行
 
+const uploadBanner = ref(''); // 上传的图片
+
 const url = BannerApi.list;
 const title = 'Banner ';
-const { pageContentRef, pageDialogRef, pageContentCreate, pageContentEdit, pageContentDelete } = usePageConent({ url });
+const { pageContentRef, pageDialogRef, pageContentCreate, pageContentEdit, pageContentDelete } = usePageConent({
+  url,
+  perSubmit,
+});
 
 // 新增按钮
 const handleCreate = async () => {
@@ -78,6 +99,7 @@ const handleDialogCreate = async (values: any) => {
 
 // 编辑按钮
 const handleEdit = (row: any) => {
+  uploadBanner.value = row.url;
   defaultFormVal.value = row;
   (pageDialogRef.value as any).dialogVisible = true;
 };
@@ -92,6 +114,7 @@ const handleDelete = async (row: { id: number | string }) => {
   await pageContentDelete(row.id);
 };
 
+// 多选
 const handleSelect = (select: any, row: any) => {
   selectRows.value = select;
 };
@@ -111,11 +134,35 @@ const checkStatus = async (title: string, status: '0' | '1') => {
   await checkStatusAction({ url: BannerApi.handle, title, data });
   (pageContentRef.value as any).getList();
 };
+
+const headers = { Authorization: `Bearer ${localStorage.getItem('token')}` };
+
+// 图片上传
+const handleUploadBannerSuccess = (res: any, file: any) => {
+  const { data } = res;
+  uploadBanner.value = data.url;
+};
+
+// 请求前的回调
+function perSubmit(type: 'create' | 'update', data: any) {
+  if (!uploadBanner.value) {
+    ElMessage.warning('请先上传图片后再进行提交');
+    return;
+  }
+
+  data.url = uploadBanner.value;
+  return data;
+}
 </script>
 <style lang="less" scoped>
 .banners {
   img {
     // width: 300px;
+  }
+  .banner-uploader {
+    /deep/ .el-upload--text {
+      width: 100%;
+    }
   }
 }
 </style>

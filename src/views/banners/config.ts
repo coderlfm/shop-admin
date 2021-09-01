@@ -19,12 +19,12 @@ export const model = () => ({
   formProps: {
     'label-width': 100,
     rules: {
-      url: [{ required: true, message: '该项为必填', trigger: 'blur' }],
+      // url: [{ required: true, message: '该项为必填', trigger: 'blur' }],
       productId: [{ required: true, message: '该项为必填', trigger: 'blur' }],
     },
   },
   formList: [
-    { wrap: { label: 'banner图', prop: 'url' }, props: { placeholder: '请上传banner图' } },
     { wrap: { label: '关联商品id', prop: 'productId' }, props: { placeholder: '请输入该banner图关联的商品id' } },
+    { wrap: { label: 'banner图', prop: 'url' }, props: { placeholder: '请上传banner图' }, slotName: 'bannerUrl' },
   ],
 });

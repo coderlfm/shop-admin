@@ -28,6 +28,8 @@ import {
   ElDropdown,
   ElDropdownMenu,
   ElDropdownItem,
+  ElResult,
+  ElUpload,
 } from 'element-plus';
 import 'element-plus/lib/theme-chalk/base.css';
 
@@ -60,6 +62,8 @@ const components = [
   ElDropdown,
   ElDropdownMenu,
   ElDropdownItem,
+  ElResult,
+  ElUpload
 ];
 
 export default function (app: App) {
