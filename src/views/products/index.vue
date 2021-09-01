@@ -8,6 +8,27 @@
       :form="form"
       @onSelect="handleSelect"
     >
+      <template #expand="scope">
+        <div class="w-full flex justify-end">
+          <Upload
+            name="product"
+            :action="BASE_URL + UploadApi.product"
+            :onSuccess="(res) => handleUploadProductImgSuccess(res, scope.row)"
+          >
+            <el-button type="primary">添加详情图</el-button>
+          </Upload>
+        </div>
+        <div v-for="item in scope.row.images" :key="item.id" class="flex flex-col">
+          <div class="flex items-start">
+            <el-image :src="item.url" style="width: 400px" :preview-src-list="scope.row.images.map((item) => item.url)">
+            </el-image>
+            <div class="ml-2 mt-2" @click="handleProductImgRemove(item.id)">
+              <el-button type="danger" icon="ri-delete-bin-6-line " circle></el-button>
+            </div>
+          </div>
+        </div>
+      </template>
+
       <template #categories="scope">
         <el-space>
           <el-tag v-for="item in scope.row.categories" :key="item.id" size="small"> {{ item.title }}</el-tag>
@@ -45,28 +66,28 @@
       @onEdit="handleDialogEdit"
     >
       <template #coverUrl>
-        <el-upload
-          class="product-uploader"
-          name="product"
-          :headers="uploadHeader"
-          :action="BASE_URL + UploadApi.product"
-          :show-file-list="false"
-          :on-success="handleUploadProductSuccess"
-        >
+        <Upload name="product" :action="BASE_URL + UploadApi.product" :onSuccess="handleUploadProductSuccess">
           <img v-if="uploadProduct" :src="uploadProduct" class="banner" />
           <div v-else class="py-24 w-full">
             <i class="ri-image-add-fill text-2xl"></i>
           </div>
-        </el-upload>
+        </Upload>
       </template>
     </Dialog>
   </div>
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { ElMessage } from 'element-plus';
-import { PageContent, Dialog } from '@/components/context';
-import { BASE_URL, getCateogriesListAPI, ProductsApi, UploadApi, uploadHeader } from '@/service';
+import { ElMessageBox, ElMessage } from 'element-plus';
+import { PageContent, Dialog, Upload } from '@/components/context';
+import {
+  BASE_URL,
+  getCateogriesListAPI,
+  ProductsApi,
+  UploadApi,
+  addProductImgByIdAPI,
+  removeProductImgByIdAPI,
+} from '@/service';
 import { usePageConent, checkStatusAction } from '@/hooks';
 import { columns, form as defaultForm, model as defaultModel } from './config';
 
@@ -144,8 +165,32 @@ const checkStatus = async (title: string, status: '0' | '1') => {
   (pageContentRef.value as any).getList();
 };
 
+// 详情图添加
+const handleUploadProductImgSuccess = async (res: any, row: any): Promise<void> => {
+  const {
+    data: { url },
+  } = res;
+  uploadProduct.value = url;
+  await addProductImgByIdAPI(row.id, { url });
+  ElMessage.success('添加成功');
+  (pageContentRef.value as any).getList();
+};
+
+// 详情图删除
+const handleProductImgRemove = async (imgId: number) => {
+  await ElMessageBox.confirm('此操作将永久删除该详情图, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  });
+
+  await removeProductImgByIdAPI(imgId);
+  ElMessage.success('删除成功');
+  (pageContentRef.value as any).getList();
+};
+
 // 图片上传
-const handleUploadProductSuccess = (res: any, file: any) => {
+const handleUploadProductSuccess = (res: any): void => {
   const { data } = res;
   uploadProduct.value = data.url;
 };
@@ -157,7 +202,7 @@ function perSubmit(type: 'create' | 'update', data: any) {
     return;
   }
 
-  data.url = uploadProduct.value;
+  data.coverUrl = uploadProduct.value;
   return data;
 }
 </script>
@@ -167,6 +212,10 @@ function perSubmit(type: 'create' | 'update', data: any) {
     /deep/ .el-upload--text {
       width: 100%;
     }
+  }
+
+  .ri-delete-bin-6-line {
+    margin-right: 0;
   }
 }
 </style>

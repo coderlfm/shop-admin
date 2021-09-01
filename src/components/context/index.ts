@@ -3,5 +3,6 @@ import Table from './table/index.vue';
 import Form from './form/index.vue';
 import Dialog from './dialog/index.vue';
 import PageContent from './page-content/index.vue';
+import Upload from './upload/index.vue';
 
-export { Layout, Table, Form, PageContent, Dialog };
+export { Layout, Table, Form, PageContent, Dialog, Upload };

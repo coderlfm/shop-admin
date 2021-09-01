@@ -1,6 +1,7 @@
 import type { Option } from '@/types';
 
 export const columns = [
+  { type: 'expand', slotName: 'expand' },
   { type: 'selection', align: 'center', width: '60' },
   { label: '商品id', key: 'id' },
   { label: '所属分类', key: 'categories', slotName: 'categories' },
