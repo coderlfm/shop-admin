@@ -1,22 +1,23 @@
 <template lang="">
   <div class="logo text-white text-2xl text-center">
 
-    <span v-if="!isCollapse">茶叶商城管理系统</span>
+    <span v-if="!isCollapse"></span>
+    <!-- <span v-if="!isCollapse">茶叶商城管理系统</span> -->
     <div v-else class="p-3 flex justify-center"><img src="@/assets/images/logo.svg" /></div>
 
   </div>
    <el-menu
       :default-active="localtion.path"
       class="el-menu-vertical"
-      @open="handleOpen"
-      @close="handleClose"
       :collapse="isCollapse"
       background-color="#213262"
       text-color="#fff"
-      active-text-color="#fff">
+      active-text-color="#fff"
+      @open="handleOpen"
+      @close="handleClose">
       <template v-for="item in menus" :key="item.path">
 
-        <el-submenu :index="item.path" v-if="item.children" >
+        <el-submenu v-if="item.children" :index="item.path" >
           <template #title>
             <div>
               <i :class="['text-base mr-2',item.icon]"></i>
@@ -24,10 +25,10 @@
             </div>
           </template>
           <!-- 暂时只支持2级菜单 -->
-          <el-menu-item :index="cItem.path" v-for="cItem in item.children" :key="cItem.path" @click="handleMenuItemClick(cItem.path)"> {{ cItem.title }} </el-menu-item>
+          <el-menu-item v-for="cItem in item.children" :key="cItem.path" :index="cItem.path" @click="handleMenuItemClick(cItem.path)"> {{ cItem.title }} </el-menu-item>
         </el-submenu>
 
-        <el-menu-item :index="item.path" v-else @click="handleMenuItemClick(item.path)">
+        <el-menu-item v-else :index="item.path" @click="handleMenuItemClick(item.path)">
           <div>
             <i :class="['text-base mr-2',item.icon]"></i>
             <span > {{ item.title }} </span>

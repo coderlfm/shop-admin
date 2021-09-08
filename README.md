@@ -1,24 +1,118 @@
-# tea-admin
+## 商城管理后台
 
-## Project setup
-```
-pnpm install
-```
-
-### Compiles and hot-reloads for development
-```
-pnpm run serve
+## 项目启动 
+``` shell
+npm run serve
 ```
 
-### Compiles and minifies for production
-```
-pnpm run build
-```
-
-### Lints and fixes files
-```
-pnpm run lint
+## 项目构建 
+``` shell
+npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## 技术方案
+- vue3.2
+- vue-router
+- vuex
+- typescript
+- crypto-js
+- dayjs
+- element-plus
+- tailwindcss
+- remixicon
+## 管理端功能
+
+- 登录校验
+- 动态注册路由
+- 动态权限路由
+- 密码加密
+- 配置式组件
+
+
+- 登录
+
+- 商品管理
+  - 添加商品
+    - 商品名称
+    - 所属分类(多选)
+    - 商品原价
+    - 商品优惠价
+    - 商品库存
+    - 商品主图
+
+  - 添加详情图
+  - 编辑商品
+  - 删除商品
+  - 商品上/下架
+
+- 分类管理
+  - 添加分类
+    - 分类排序
+  - 编辑分类
+  - 删除分类
+
+- 订单管理
+  - 订单搜索
+    - id
+    - 用户昵称
+    - 订单状态
+      - 待支付
+      - 待发货
+      - 已发货
+      - 已取消
+      - 已完成
+    - 物流号
+    - 收件人姓名
+    - 收件人手机号
+  - 订单详情
+    - 商品名称
+    - 商品价格
+    - 商品数量
+  - 编辑订单
+  - 删除订单
+
+- banner管理
+  - 添加banner
+    - 关联商品id
+  - 编辑banner
+  - 删除banner
+  - banner启/停用
+
+- 用户管理(客户端用户)
+  - 订单搜索
+    - 账号
+    - 昵称
+    - 手机号
+  - 编辑用户
+  - 删除用户
+  - 用户冻结/解冻
+
+- 账号管理(管理端用户)
+  - 新增账号
+  - 编辑账号
+    - 角色分配
+  - 删除账号
+  - 账号冻结/解冻
+  - 重置密码
+
+- 角色管理
+  - 新增角色
+  - 编辑角色
+    - 权限分配(多选)
+  - 删除角色
+
+- 权限管理
+  - 新增权限
+    - 接口地址
+    - 权限描述
+    - 权限类型
+      - 一级菜单
+      - 二级菜单
+      - 操作(按钮)菜单
+    - 权限图标
+    - 前端路由路径
+    - 后端路由路径
+  - 编辑权限
+  - 删除权限
+
