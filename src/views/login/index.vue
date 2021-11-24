@@ -7,7 +7,14 @@
           <el-input v-model="formValues.account"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="formValues.password" type="password"></el-input>
+          <el-input v-model="formValues.password" :type="showPassword ? 'text' : 'password'">
+            <template #suffix>
+              <i
+                :class="['cursor-pointer hover:text-blue-400', showPassword ? 'ri-eye-line' : 'ri-eye-off-line']"
+                @click="showPassword = !showPassword"
+              ></i>
+            </template>
+          </el-input>
         </el-form-item>
       </el-form>
     </section>
@@ -27,9 +34,10 @@ import { cryptoPassword } from '@/utils';
 
 const formRef = ref<InstanceType<typeof ElForm>>();
 const formValues = ref<ILoginData>({
-  account: '',
-  password: '',
+  account: 'superadmin',
+  password: '123456',
 });
+const showPassword = ref(false); // 展示密码
 
 const rules = {
   account: [{ required: true, message: '请输入账号', trigger: 'blur' }],
@@ -37,7 +45,7 @@ const rules = {
 };
 
 const handleLoign = async () => {
-  // console.log(formRef.value);
+  // // console.log(formRef.value);
 
   const valid = await formRef.value?.validate();
   if (!valid) return ElMessage.warning('请输入完整后再进行提交');
@@ -51,10 +59,8 @@ const handleLoign = async () => {
   localStorage.setItem('token', data.token);
   ElMessage.success('登录成功');
   await setupStore();
-  console.log('3');
 
   router.push('/products');
-  setTimeout(() => {}, 0);
 };
 </script>
 

@@ -91,7 +91,7 @@ const handleSearch = (values: any) => changeSearch(values);
 const handleReset = (values: any) => changeSearch(values);
 
 const changeSearch = (values: any) => {
-  console.log('values', values);
+  // console.log('values', values);
 
   for (const key in values) {
     search.value[key] = values[key];

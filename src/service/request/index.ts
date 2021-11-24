@@ -54,7 +54,7 @@ class Request {
         const data = res.data;
         if (!data || data.code) {
           const error = (res as unknown as AxiosError).response?.data;
-          console.log('请求失败~, 错误信息', error);
+          // console.log('请求失败~, 错误信息', error);
           ElMessage.warning(error.message ?? '请求超时');
           return Promise.reject(error);
         } else {
@@ -65,13 +65,13 @@ class Request {
         // 将loading移除
         // this.loading?.close();
 
-        console.log('err:', err.message);
+        // console.log('err:', err.message);
 
         // ElMessage.warning(err.message ?? '请求超时');
 
         // 例子: 判断不同的HttpErrorCode显示不同的错误信息
         if (err.response.status === 404) {
-          console.log('404的错误~');
+          // console.log('404的错误~');
         }
         return Promise.reject(err);
       },
@@ -90,7 +90,7 @@ class Request {
       //   this.showLoading = config.showLoading;
       // }
 
-      // console.log(JSON.stringify(JSON.parse(config)));
+      // // console.log(JSON.stringify(JSON.parse(config)));
 
       if (config.data) {
         for (const key in config.data) {
@@ -107,7 +107,7 @@ class Request {
           }
           // 2.将showLoading设置true, 这样不会影响下一个请求
           // this.showLoading = DEAFULT_LOADING;
-          // console.log('then_res', res);
+          // // console.log('then_res', res);
 
           // 3.将结果resolve返回出去
           resolve(res);
@@ -115,7 +115,7 @@ class Request {
         .catch((err) => {
           // 将showLoading设置true, 这样不会影响下一个请求
           // this.showLoading = DEAFULT_LOADING;
-          // console.log('rejevt_res', err);
+          // // console.log('rejevt_res', err);
           // reject(err);
           return err;
         });

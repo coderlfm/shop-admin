@@ -50,7 +50,7 @@
         <el-upload
           class="banner-uploader"
           name="banner"
-          :headers="uploadHeader"
+          :headers="uploadHeader()"
           :action="BASE_URL + UploadApi.banner"
           :show-file-list="false"
           :on-success="handleUploadBannerSuccess"

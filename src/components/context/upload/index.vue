@@ -2,7 +2,7 @@
   <el-upload
     :class="`${name}-uploader`"
     :name="name"
-    :headers="uploadHeader"
+    :headers="uploadHeader()"
     :action="action"
     :show-file-list="false"
     :onSuccess="onSuccess"

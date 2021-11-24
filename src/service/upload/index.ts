@@ -3,11 +3,11 @@ export enum UploadApi {
   product = '/upload/product',
 }
 
-function getToken (){
-  return `Bearer ${localStorage.getItem('token')}`
+function getToken() {
+  return `Bearer ${localStorage.getItem('token')}`;
 }
 
 // 图片上传 header
-export const uploadHeader = {
+export const uploadHeader = () => ({
   Authorization: getToken(),
-};
+});

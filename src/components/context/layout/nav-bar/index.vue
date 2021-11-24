@@ -55,7 +55,7 @@ const resetPasswordVisibile = ref(false)  // 弹出框
 const formRef = ref<InstanceType<typeof Form>>(); // 表单 ref
 
 const handleSubmit = async (values: any) => {
-  console.log('value:', values);
+  // console.log('value:', values);
    await resetAccountPasswordApi({oldPassword: cryptoPassword(values.oldPassword), newPassword:cryptoPassword(values.newPassword) })
    ElMessage.success('修改成功');
    hadleLogout();

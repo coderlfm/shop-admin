@@ -1,8 +1,8 @@
 <template lang="">
   <div class="logo text-white text-2xl text-center">
 
-    <span v-if="!isCollapse"></span>
-    <!-- <span v-if="!isCollapse">茶叶商城管理系统</span> -->
+    <!-- <span v-if="!isCollapse"></span> -->
+    <span v-if="!isCollapse">商城管理系统</span>
     <div v-else class="p-3 flex justify-center"><img src="@/assets/images/logo.svg" /></div>
 
   </div>
@@ -56,15 +56,15 @@ const localtion = useRoute();
 const menus = computed(() => store.state.permission?.menus)
 
 const handleOpen = (key:any, keyPath:any) => {
-  console.log(key, keyPath);
+  // console.log(key, keyPath);
 };
 const handleClose = (key:any, keyPath:any) => {
-  console.log(key, keyPath);
+  // console.log(key, keyPath);
 };
 
 const handleMenuItemClick = (path:string) => router.push(path)
 
-// console.log(router.getRoutes());
+// // console.log(router.getRoutes());
 </script>
 <style lang="less" scoped>
 .logo{

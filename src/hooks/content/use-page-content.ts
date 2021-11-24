@@ -31,7 +31,7 @@ export function usePageConent({
 
   async function pageContentCreate(data: any) {
     perSubmit && (data = perSubmit('create', data));
-    console.log('data', data);
+    // console.log('data', data);
 
     if (!data) return;
     await Request.post({ url, data });

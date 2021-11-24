@@ -91,7 +91,7 @@ const handleDelete = async (row: { id: number | string }) => {
  * 类型选择的事件
  */
 function handleFormTypeSelectChange(type: number) {
-  console.log('type', type);
+  // console.log('type', type);
   formatPermissionType(type);
 }
 
